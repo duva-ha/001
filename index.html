@@ -3,101 +3,73 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Hệ Thống Trắc Nghiệm Công Nghệ - Khối 10</title>
+    <title>Hệ Thống Trắc Nghiệm Công Nghệ - Review Mode</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
     <style>
         :root { --primary: #0ea5e9; --bg: #0f172a; }
-        body { 
-            background: var(--bg); 
-            color: #f1f5f9; 
-            font-family: 'Inter', sans-serif; 
-            min-height: 100vh;
-            margin: 0;
-        }
+        body { background: var(--bg); color: #f1f5f9; font-family: 'Inter', sans-serif; min-height: 100vh; margin: 0; }
         .font-tech { font-family: 'Orbitron', sans-serif; }
         .glass { background: rgba(30, 41, 59, 0.7); backdrop-filter: blur(10px); border: 1px solid rgba(255,255,255,0.1); }
-        .btn-tech { 
-            transition: all 0.3s; 
-            border: 1px solid rgba(14, 165, 233, 0.3);
-            cursor: pointer;
-        }
-        .btn-tech:hover { 
-            background: var(--primary); 
-            color: white; 
-            box-shadow: 0 0 20px var(--primary);
-        }
+        .btn-tech { transition: all 0.3s; border: 1px solid rgba(14, 165, 233, 0.3); cursor: pointer; }
+        .btn-tech:hover { background: var(--primary); color: white; box-shadow: 0 0 20px var(--primary); }
         .hidden { display: none; }
         .selected-opt { background: rgba(14, 165, 233, 0.3) !important; border-color: #0ea5e9 !important; }
+        /* Style cho Review */
+        .opt-correct { background: #059669 !important; border-color: #10b981 !important; color: white; }
+        .opt-wrong { background: #dc2626 !important; border-color: #ef4444 !important; color: white; }
     </style>
 </head>
 <body class="p-4 md:p-8">
 
-    <!-- Header & Timer -->
     <div class="max-w-4xl mx-auto flex justify-between items-center mb-8">
         <div>
-            <h1 class="font-tech text-2xl text-sky-400">TECH_EXAM v1.1</h1>
-            <p id="sub-info" class="text-xs text-slate-500 uppercase tracking-widest">Hệ thống đánh giá năng lực Công nghệ</p>
+            <h1 class="font-tech text-2xl text-sky-400">TECH_EXAM v1.2</h1>
+            <p class="text-xs text-slate-500 uppercase tracking-widest">Review & Feedback System</p>
         </div>
         <div id="timer-box" class="glass px-6 py-2 rounded-full border-sky-500/50 hidden">
-            <span class="text-xs text-sky-500 mr-2 uppercase">Thời gian:</span>
-            <span id="timer" class="font-tech text-xl">15:00</span>
+            <span id="timer" class="font-tech text-xl text-sky-400">15:00</span>
         </div>
     </div>
 
     <div class="max-w-4xl mx-auto">
-        <!-- MÀN HÌNH 1: CHỌN KHỐI LỚP -->
-        <div id="screen-1" class="space-y-6 text-center py-12">
+        <!-- MÀN HÌNH 1: CHỌN KHỐI -->
+        <div id="screen-1" class="text-center py-12">
             <h2 class="text-3xl font-bold mb-10">Chọn Khối Lớp</h2>
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-                <button onclick="selectGrade(10)" class="btn-tech glass p-8 rounded-2xl text-xl font-bold">CÔNG NGHỆ 10</button>
-                <button onclick="selectGrade(11)" class="btn-tech glass p-8 rounded-2xl text-xl font-bold text-slate-500 cursor-not-allowed" disabled>CÔNG NGHỆ 11 (Coming soon)</button>
-                <button onclick="selectGrade(12)" class="btn-tech glass p-8 rounded-2xl text-xl font-bold text-slate-500 cursor-not-allowed" disabled>CÔNG NGHỆ 12 (Coming soon)</button>
-            </div>
+            <button onclick="selectGrade(10)" class="btn-tech glass p-8 rounded-2xl text-xl font-bold w-64">CÔNG NGHỆ 10</button>
         </div>
 
         <!-- MÀN HÌNH 2: CHỌN HÌNH THỨC -->
-        <div id="screen-2" class="hidden space-y-6 text-center py-12">
-            <h2 id="grade-title" class="text-3xl font-bold mb-10">Chọn Hình Thức Thi</h2>
+        <div id="screen-2" class="hidden text-center py-12">
+            <h2 class="text-3xl font-bold mb-10">Chọn Hình Thức Thi</h2>
             <div class="flex flex-col md:flex-row justify-center gap-6">
-                <button onclick="selectType('multiple')" class="btn-tech glass p-8 rounded-2xl text-xl font-bold w-full md:w-80">Trắc Nghiệm Nhiều Lựa Chọn (30 câu)</button>
-                <button onclick="selectType('boolean')" class="btn-tech glass p-8 rounded-2xl text-xl font-bold w-full md:w-80">Trắc Nghiệm Đúng Sai (15 câu)</button>
+                <button onclick="selectType('multiple')" class="btn-tech glass p-8 rounded-2xl text-xl font-bold w-full md:w-80">Trắc Nghiệm (30 câu)</button>
             </div>
-            <button onclick="goBack(1)" class="text-slate-500 hover:text-white uppercase text-xs mt-8">← Quay lại chọn khối</button>
         </div>
 
         <!-- MÀN HÌNH 3: LÀM BÀI -->
         <div id="screen-3" class="hidden">
-            <div id="quiz-container" class="space-y-8 mb-32">
-                <!-- Câu hỏi render ở đây -->
-            </div>
-            
+            <div id="quiz-container" class="space-y-8 mb-32"></div>
             <div class="fixed bottom-0 left-0 w-full glass p-4 flex justify-center border-t border-sky-500/30 z-50">
-                <button onclick="confirmSubmit()" class="bg-sky-600 hover:bg-sky-500 text-white px-12 py-3 rounded-xl font-bold uppercase tracking-widest shadow-lg transition-all">Nộp Bài</button>
+                <button id="submit-btn" onclick="confirmSubmit()" class="bg-sky-600 hover:bg-sky-500 text-white px-12 py-3 rounded-xl font-bold uppercase tracking-widest transition-all">Nộp Bài</button>
             </div>
         </div>
 
         <!-- MÀN HÌNH 4: KẾT QUẢ -->
         <div id="screen-4" class="hidden text-center py-12 space-y-6">
-            <h2 class="font-tech text-4xl text-sky-400">KẾT QUẢ</h2>
+            <h2 class="font-tech text-4xl text-sky-400">HOÀN THÀNH</h2>
             <div class="glass p-10 rounded-3xl inline-block min-w-[300px]">
-                <p class="text-slate-400 uppercase text-sm mb-2">Số câu đúng</p>
                 <p id="score-text" class="text-6xl font-bold">0/30</p>
             </div>
-            <div class="pt-8">
-                <button onclick="location.reload()" class="btn-tech glass px-8 py-3 rounded-full uppercase text-sm">Làm lại</button>
+            <div class="flex flex-col items-center gap-4 pt-8">
+                <button onclick="showReview()" class="bg-emerald-600 hover:bg-emerald-500 px-10 py-3 rounded-full uppercase text-sm font-bold transition-all">Xem lại đáp án</button>
+                <button onclick="location.reload()" class="text-slate-400 hover:text-white uppercase text-xs">Làm lại từ đầu</button>
             </div>
         </div>
     </div>
 
     <script>
-        let quizState = {
-            grade: 0,
-            type: '',
-            timeLeft: 900,
-            timerInterval: null,
-            userAnswers: {}
-        };
+        let quizState = { grade: 0, type: '', timeLeft: 900, timerInterval: null, userAnswers: {}, isReview: false };
 
         const questionsDB = {
             10: {
@@ -122,47 +94,22 @@
                     { question: "Việc sử dụng vật liệu tái chế trong thiết kế giúp đảm bảo yếu tố nào sau đây?", options: ["Chi phí sản xuất cao.", "Tính thẩm mỹ.", "An toàn cho người dùng.", "Phát triển bền vững."], answer: 3 },
                     { question: "Công việc của nhà thiết kế sản phẩm là", options: ["lên kế hoạch và thiết kế nội thất.", "lên kế hoạch và thiết kế cảnh quan.", "thiết kế toà nhà thương mại.", "thiết kế hình thức các sản phẩm sao cho hấp dẫn, hiệu quả và kinh tế."], answer: 3 },
                     { question: "Trong AutoCAD, đâu là cách vẽ hình chữ nhật?", options: ["Lệnh Arc", "Lệnh C", "Lệnh L", "Lệnh REC"], answer: 3 },
-                    { question: "Yếu tố nào sau đây KHÔNG phải là yếu tố ảnh hưởng đến quá trình thiết kế sản phẩm?", options: ["Thời tiết.", "Tính thẩm mỹ.", "Nhân trắc.", "An toàn."], answer: 0 },
+                    { question: "Yêu cầu kĩ thuật thường bao gồm:", options: ["Chỉ dẫn về gia công và nhiệt luyện.", "Bảng kê vật tư.", "Giá thành sản phẩm.", "Kích thước chung."], answer: 0 },
                     { question: "Các phần mềm thiết kế với sự hỗ trợ của máy tính được gọi là:", options: ["Photoshop", "Drawing", "Painting", "CAD"], answer: 3 },
                     { question: "Bước nào trong quy trình thiết kế kỹ thuật có tính chất quyết định đến tính sáng tạo của sản phẩm?", options: ["Tìm hiểu tổng quan.", "Đề xuất, đánh giá và lựa chọn giải pháp.", "Kiểm chứng giải pháp.", "Xác định yêu cầu."], answer: 1 },
                     { question: "Vai trò chủ yếu của hoạt động thiết kế kĩ thuật là gì?", options: ["Phát triển kĩ thuật.", "Phát triển sản phẩm và công nghệ.", "Phát triển Toán học.", "Phát triển khoa học."], answer: 1 },
-                    { question: "Các phần mềm thiết kế với sự hỗ trợ của máy tính được gọi là: (Câu hỏi lặp)", options: ["Photoshop", "Drawing", "Painting", "CAD"], answer: 3 },
-                    // 5 câu bổ sung cho đủ 30 câu
+                    { question: "Hình chiếu đứng của ren trục, đường giới hạn ren được vẽ bằng nét gì?", options: ["Liền mảnh", "Đứt mảnh", "Liền đậm", "Chấm gạch"], answer: 2 },
                     { question: "Đường giới hạn ren được vẽ bằng nét gì?", options: ["Liền đậm", "Liền mảnh", "Đứt mảnh", "Chấm gạch"], answer: 0 },
                     { question: "Khổ giấy A4 có kích thước bao nhiêu?", options: ["210x297", "297x420", "594x841", "148x210"], answer: 0 },
                     { question: "Tỉ lệ 2:1 là tỉ lệ gì?", options: ["Tỉ lệ thu nhỏ", "Tỉ lệ nguyên hình", "Tỉ lệ phóng to", "Tỉ lệ bất kỳ"], answer: 2 },
                     { question: "Trong bản vẽ kĩ thuật, nét đứt mảnh dùng để vẽ gì?", options: ["Đường bao thấy", "Đường ghi kích thước", "Đường bao khuất", "Đường tâm"], answer: 2 },
                     { question: "Phần mềm nào phổ biến nhất trong vẽ kỹ thuật 2D?", options: ["AutoCAD", "Excel", "Word", "PowerPoint"], answer: 0 }
-                ],
-                boolean: [
-                    // Giữ nguyên 15 câu demo như trước
-                    { question: "Nhận định về quy ước vẽ ren:", subQuestions: ["Đỉnh ren vẽ nét liền đậm", "Chân ren vẽ nét đứt", "Vòng chân ren vẽ hở 1/4", "Giới hạn ren vẽ nét liền mảnh"], answers: [true, false, true, false] },
-                    { question: "Về các khổ giấy kỹ thuật:", subQuestions: ["A0 là khổ lớn nhất", "A4 là gấp đôi A3", "Kích thước A4 là 210x297", "Mọi khổ giấy đều có lề"], answers: [true, false, true, true] },
-                    // Thêm 13 câu tương tự cho đủ 15 câu...
                 ]
             }
         };
 
-        function selectGrade(g) {
-            quizState.grade = g;
-            document.getElementById('grade-title').innerText = `Công Nghệ ${g} - Chọn Hình Thức`;
-            document.getElementById('screen-1').classList.add('hidden');
-            document.getElementById('screen-2').classList.remove('hidden');
-        }
-
-        function selectType(t) {
-            quizState.type = t;
-            document.getElementById('screen-2').classList.add('hidden');
-            document.getElementById('screen-3').classList.remove('hidden');
-            document.getElementById('timer-box').classList.remove('hidden');
-            startTimer();
-            renderQuiz();
-        }
-
-        function goBack(screen) {
-            document.querySelectorAll('[id^="screen-"]').forEach(s => s.classList.add('hidden'));
-            document.getElementById(`screen-${screen}`).classList.remove('hidden');
-        }
+        function selectGrade(g) { quizState.grade = g; document.getElementById('screen-1').classList.add('hidden'); document.getElementById('screen-2').classList.remove('hidden'); }
+        function selectType(t) { quizState.type = t; document.getElementById('screen-2').classList.add('hidden'); document.getElementById('screen-3').classList.remove('hidden'); document.getElementById('timer-box').classList.remove('hidden'); startTimer(); renderQuiz(); }
 
         function startTimer() {
             quizState.timerInterval = setInterval(() => {
@@ -182,80 +129,61 @@
             data.forEach((q, idx) => {
                 const qDiv = document.createElement('div');
                 qDiv.className = "glass p-6 rounded-2xl space-y-4";
-                
-                if(quizState.type === 'multiple') {
-                    qDiv.innerHTML = `
-                        <p class="font-bold text-sky-400">Câu ${idx+1}/30</p>
-                        <p class="text-lg">${q.question}</p>
-                        <div class="grid grid-cols-1 gap-3">
-                            ${q.options.map((opt, i) => `
-                                <button onclick="pickMultiple(${idx}, ${i}, this)" class="option-btn text-left p-4 rounded-xl border border-white/10 hover:bg-white/5 transition-all">
-                                    <span class="font-bold mr-2">${String.fromCharCode(65 + i)}.</span> ${opt}
-                                </button>
-                            `).join('')}
-                        </div>
-                    `;
-                } else {
-                    // Boolean UI
-                    qDiv.innerHTML = `
-                        <p class="font-bold text-sky-400">Câu ${idx+1}/15</p>
-                        <p class="text-lg mb-4">${q.question}</p>
-                        <div class="space-y-2">
-                            ${q.subQuestions ? q.subQuestions.map((sq, i) => `
-                                <div class="flex items-center justify-between p-3 bg-white/5 rounded-lg">
-                                    <span class="text-sm">${i+1}. ${sq}</span>
-                                    <div class="flex gap-2">
-                                        <button onclick="pickBoolean(${idx}, ${i}, true, this)" class="px-4 py-1 rounded bg-slate-700 text-xs">Đúng</button>
-                                        <button onclick="pickBoolean(${idx}, ${i}, false, this)" class="px-4 py-1 rounded bg-slate-700 text-xs">Sai</button>
-                                    </div>
-                                </div>
-                            `).join('') : ''}
-                        </div>
-                    `;
-                }
+                qDiv.innerHTML = `
+                    <p class="font-bold text-sky-400">Câu ${idx+1}</p>
+                    <p class="text-lg">${q.question}</p>
+                    <div class="grid grid-cols-1 gap-3">
+                        ${q.options.map((opt, i) => {
+                            let extraClass = "";
+                            if(quizState.isReview) {
+                                if(i === q.answer) extraClass = "opt-correct";
+                                else if(quizState.userAnswers[idx] === i) extraClass = "opt-wrong";
+                            } else if(quizState.userAnswers[idx] === i) {
+                                extraClass = "selected-opt";
+                            }
+                            return `<button ${quizState.isReview ? 'disabled' : ''} onclick="pickMultiple(${idx}, ${i}, this)" class="option-btn text-left p-4 rounded-xl border border-white/10 hover:bg-white/5 transition-all ${extraClass}">
+                                <span class="font-bold mr-2">${String.fromCharCode(65 + i)}.</span> ${opt}
+                                ${quizState.isReview && i === q.answer ? ' <span class="float-right">✓</span>' : ''}
+                                ${quizState.isReview && quizState.userAnswers[idx] === i && i !== q.answer ? ' <span class="float-right">✗</span>' : ''}
+                            </button>`;
+                        }).join('')}
+                    </div>
+                `;
                 container.appendChild(qDiv);
             });
         }
 
         function pickMultiple(qIdx, optIdx, btn) {
             quizState.userAnswers[qIdx] = optIdx;
-            const parent = btn.closest('.grid');
-            parent.querySelectorAll('.option-btn').forEach(b => b.classList.remove('selected-opt'));
+            btn.closest('.grid').querySelectorAll('.option-btn').forEach(b => b.classList.remove('selected-opt'));
             btn.classList.add('selected-opt');
         }
 
-        function pickBoolean(qIdx, subIdx, val, btn) {
-            if(!quizState.userAnswers[qIdx]) quizState.userAnswers[qIdx] = {};
-            quizState.userAnswers[qIdx][subIdx] = val;
-            btn.parentElement.querySelectorAll('button').forEach(b => b.classList.remove('bg-sky-500'));
-            btn.classList.add('bg-sky-500');
-        }
-
-        function confirmSubmit() {
-            if(confirm("Bạn có chắc chắn muốn nộp bài?")) submitExam();
-        }
+        function confirmSubmit() { if(confirm("Bạn có chắc muốn nộp bài?")) submitExam(); }
 
         function submitExam() {
             clearInterval(quizState.timerInterval);
             let score = 0;
             const data = questionsDB[quizState.grade][quizState.type];
-            const total = quizState.type === 'multiple' ? 30 : 15;
-
-            data.forEach((q, i) => {
-                if(quizState.type === 'multiple') {
-                    if(quizState.userAnswers[i] === q.answer) score++;
-                } else {
-                    const uAns = quizState.userAnswers[i] || {};
-                    let subCorrect = 0;
-                    q.answers.forEach((ans, si) => { if(uAns[si] === ans) subCorrect++; });
-                    if(subCorrect === 4) score++;
-                }
-            });
+            data.forEach((q, i) => { if(quizState.userAnswers[i] === q.answer) score++; });
 
             document.getElementById('screen-3').classList.add('hidden');
             document.getElementById('timer-box').classList.add('hidden');
             document.getElementById('screen-4').classList.remove('hidden');
-            document.getElementById('score-text').innerText = `${score}/${total}`;
+            document.getElementById('score-text').innerText = `${score}/${data.length}`;
+            window.scrollTo(0,0);
+        }
+
+        function showReview() {
+            quizState.isReview = true;
+            document.getElementById('screen-4').classList.add('hidden');
+            document.getElementById('screen-3').classList.remove('hidden');
+            document.getElementById('submit-btn').innerText = "Quay lại kết quả";
+            document.getElementById('submit-btn').onclick = () => {
+                document.getElementById('screen-3').classList.add('hidden');
+                document.getElementById('screen-4').classList.remove('hidden');
+            };
+            renderQuiz();
             window.scrollTo(0,0);
         }
     </script>
