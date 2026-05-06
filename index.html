@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hệ Thống Trắc Nghiệm Công Nghệ</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
+    <style>
+        :root { --primary: #0ea5e9; --bg: #0f172a; }
+        body { 
+            background: var(--bg); 
+            color: #f1f5f9; 
+            font-family: 'Inter', sans-serif; 
+            min-height: 100vh;
+        }
+        .font-tech { font-family: 'Orbitron', sans-serif; }
+        .glass { background: rgba(30, 41, 59, 0.7); backdrop-filter: blur(10px); border: 1px solid rgba(255,255,255,0.1); }
+        .btn-tech { 
+            transition: all 0.3s; 
+            border: 1px solid rgba(14, 165, 233, 0.3);
+            cursor: pointer;
+        }
+        .btn-tech:hover { 
+            background: var(--primary); 
+            color: white; 
+            box-shadow: 0 0 20px var(--primary);
+        }
+        .hidden { display: none; }
+        .correct { background: #059669 !important; }
+        .wrong { background: #dc2626 !important; }
+    </style>
+</head>
+<body class="p-4 md:p-8">
+
+    <!-- Header & Timer -->
+    <div class="max-w-4xl mx-auto flex justify-between items-center mb-8">
+        <div>
+            <h1 class="font-tech text-2xl text-sky-400">TECH_EXAM v1.0</h1>
+            <p id="sub-info" class="text-xs text-slate-500 uppercase tracking-widest">Hệ thống đánh giá năng lực</p>
+        </div>
+        <div id="timer-box" class="glass px-6 py-2 rounded-full border-sky-500/50 hidden">
+            <span class="text-xs text-sky-500 mr-2 uppercase">Time:</span>
+            <span id="timer" class="font-tech text-xl">15:00</span>
+        </div>
+    </div>
+
+    <div class="max-w-4xl mx-auto">
+        <!-- MÀN HÌNH 1: CHỌN KHỐI LỚP -->
+        <div id="screen-1" class="space-y-6 text-center py-12">
+            <h2 class="text-3xl font-bold mb-10">Chọn Khối Lớp</h2>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <button onclick="selectGrade(10)" class="btn-tech glass p-8 rounded-2xl text-xl font-bold">CÔNG NGHỆ 10</button>
+                <button onclick="selectGrade(11)" class="btn-tech glass p-8 rounded-2xl text-xl font-bold">CÔNG NGHỆ 11</button>
+                <button onclick="selectGrade(12)" class="btn-tech glass p-8 rounded-2xl text-xl font-bold">CÔNG NGHỆ 12</button>
+            </div>
+        </div>
+
+        <!-- MÀN HÌNH 2: CHỌN HÌNH THỨC -->
+        <div id="screen-2" class="hidden space-y-6 text-center py-12">
+            <h2 class="text-3xl font-bold mb-10">Chọn Hình Thức Thi</h2>
+            <div class="flex flex-col md:flex-row justify-center gap-6">
+                <button onclick="selectType('multiple')" class="btn-tech glass p-8 rounded-2xl text-xl font-bold w-full md:w-80">Trắc Nghiệm Nhiều Lựa Chọn (30 câu)</button>
+                <button onclick="selectType('boolean')" class="btn-tech glass p-8 rounded-2xl text-xl font-bold w-full md:w-80">Trắc Nghiệm Đúng Sai (15 câu)</button>
+            </div>
+            <button onclick="goBack(1)" class="text-slate-500 hover:text-white uppercase text-xs mt-8">← Quay lại</button>
+        </div>
+
+        <!-- MÀN HÌNH 3: LÀM BÀI -->
+        <div id="screen-3" class="hidden">
+            <div id="quiz-container" class="space-y-8 mb-20">
+                <!-- Câu hỏi sẽ render ở đây -->
+            </div>
+            
+            <div class="fixed bottom-0 left-0 w-full glass p-4 flex justify-center border-t border-sky-500/30">
+                <button onclick="submitExam()" class="bg-sky-600 hover:bg-sky-500 text-white px-12 py-3 rounded-xl font-bold uppercase tracking-widest shadow-lg shadow-sky-900/20">Nộp Bài</button>
+            </div>
+        </div>
+
+        <!-- MÀN HÌNH 4: KẾT QUẢ -->
+        <div id="screen-4" class="hidden text-center py-12 space-y-6">
+            <h2 class="font-tech text-4xl text-sky-400">RESULT</h2>
+            <div class="glass p-10 rounded-3xl inline-block min-w-[300px]">
+                <p class="text-slate-400 uppercase text-sm mb-2">Số câu đúng</p>
+                <p id="score-text" class="text-6xl font-bold">0/30</p>
+            </div>
+            <div class="pt-8">
+                <button onclick="location.reload()" class="btn-tech glass px-8 py-3 rounded-full uppercase text-sm">Làm lại từ đầu</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let quizData = {
+            grade: 0,
+            type: '',
+            timeLeft: 900, // 15 phút
+            timerInterval: null,
+            userAnswers: {}
+        };
+
+        // Dữ liệu mẫu (Bạn có thể thay đổi nội dung câu hỏi ở đây)
+        const sampleQuestions = {
+            multiple: Array.from({length: 30}, (_, i) => ({
+                id: i,
+                question: `Câu hỏi trắc nghiệm số ${i+1}: Khái niệm nào sau đây đúng về quy trình công nghệ?`,
+                options: ["Phương án A", "Phương án B", "Phương án C", "Phương án D"],
+                answer: 0 // Vị trí phương án đúng
+            })),
+            boolean: Array.from({length: 15}, (_, i) => ({
+                id: i,
+                question: `Câu hỏi đúng sai số ${i+1}: Các nhận định sau đây về bản vẽ kỹ thuật là:`,
+                subQuestions: [
+                    "Bản vẽ kỹ thuật chỉ dùng trong xây dựng.",
+                    "Hình chiếu đứng nhìn từ phía trước.",
+                    "Tỉ lệ 1:2 là tỉ lệ phóng to.",
+                    "Nét đứt mảnh dùng để vẽ đường tâm."
+                ],
+                answers: [false, true, false, false]
+            }))
+        };
+
+        function selectGrade(g) {
+            quizData.grade = g;
+            document.getElementById('screen-1').classList.add('hidden');
+            document.getElementById('screen-2').classList.remove('hidden');
+        }
+
+        function selectType(t) {
+            quizData.type = t;
+            document.getElementById('screen-2').classList.add('hidden');
+            document.getElementById('screen-3').classList.remove('hidden');
+            document.getElementById('timer-box').classList.remove('hidden');
+            startTimer();
+            renderQuiz();
+        }
+
+        function goBack(screen) {
+            document.querySelectorAll('[id^="screen-"]').forEach(s => s.classList.add('hidden'));
+            document.getElementById(`screen-${screen}`).classList.remove('hidden');
+        }
+
+        function startTimer() {
+            quizData.timerInterval = setInterval(() => {
+                quizData.timeLeft--;
+                let m = Math.floor(quizData.timeLeft / 60);
+                let s = quizData.timeLeft % 60;
+                document.getElementById('timer').innerText = `${m}:${s < 10 ? '0'+s : s}`;
+                
+                if(quizData.timeLeft <= 0) {
+                    clearInterval(quizData.timerInterval);
+                    submitExam();
+                }
+            }, 1000);
+        }
+
+        function renderQuiz() {
+            const container = document.getElementById('quiz-container');
+            container.innerHTML = '';
+            
+            if(quizData.type === 'multiple') {
+                sampleQuestions.multiple.forEach((q, idx) => {
+                    const qDiv = document.createElement('div');
+                    qDiv.className = "glass p-6 rounded-2xl space-y-4";
+                    qDiv.innerHTML = `
+                        <p class="font-bold text-sky-400">Câu ${idx+1}</p>
+                        <p class="text-lg">${q.question}</p>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+                            ${q.options.map((opt, i) => `
+                                <button onclick="pickMultiple(${idx}, ${i}, this)" class="text-left p-4 rounded-xl border border-white/10 hover:bg-white/5 transition-all">
+                                    ${String.fromCharCode(65 + i)}. ${opt}
+                                </button>
+                            `).join('')}
+                        </div>
+                    `;
+                    container.appendChild(qDiv);
+                });
+            } else {
+                sampleQuestions.boolean.forEach((q, idx) => {
+                    const qDiv = document.createElement('div');
+                    qDiv.className = "glass p-6 rounded-2xl space-y-4";
+                    let subHtml = q.subQuestions.map((sq, i) => `
+                        <div class="flex items-center justify-between p-3 border-b border-white/5 last:border-0">
+                            <p class="flex-1 mr-4">${i+1}. ${sq}</p>
+                            <div class="flex gap-2">
+                                <button onclick="pickBoolean(${idx}, ${i}, true, this)" class="px-4 py-1 rounded bg-slate-700 text-xs uppercase">Đúng</button>
+                                <button onclick="pickBoolean(${idx}, ${i}, false, this)" class="px-4 py-1 rounded bg-slate-700 text-xs uppercase">Sai</button>
+                            </div>
+                        </div>
+                    `).join('');
+                    
+                    qDiv.innerHTML = `
+                        <p class="font-bold text-sky-400">Câu ${idx+1}</p>
+                        <p class="text-lg mb-4">${q.question}</p>
+                        <div class="bg-black/20 rounded-xl overflow-hidden">${subHtml}</div>
+                    `;
+                    container.appendChild(qDiv);
+                });
+            }
+        }
+
+        function pickMultiple(qIdx, optIdx, btn) {
+            quizData.userAnswers[qIdx] = optIdx;
+            // Highlight nút đã chọn
+            btn.parentElement.querySelectorAll('button').forEach(b => b.classList.remove('border-sky-500', 'bg-sky-500/20'));
+            btn.classList.add('border-sky-500', 'bg-sky-500/20');
+        }
+
+        function pickBoolean(qIdx, subIdx, val, btn) {
+            if(!quizData.userAnswers[qIdx]) quizData.userAnswers[qIdx] = {};
+            quizData.userAnswers[qIdx][subIdx] = val;
+            // Highlight nút
+            btn.parentElement.querySelectorAll('button').forEach(b => b.classList.remove('bg-sky-500'));
+            btn.classList.add('bg-sky-500');
+        }
+
+        function submitExam() {
+            clearInterval(quizData.timerInterval);
+            let score = 0;
+            let total = quizData.type === 'multiple' ? 30 : 15;
+
+            if(quizData.type === 'multiple') {
+                sampleQuestions.multiple.forEach((q, i) => {
+                    if(quizData.userAnswers[i] === q.answer) score++;
+                });
+            } else {
+                sampleQuestions.boolean.forEach((q, i) => {
+                    const userAns = quizData.userAnswers[i] || {};
+                    // Logic: Đúng sai thường tính điểm khi đúng cả 4 ý, nhưng ở đây tôi tính trung bình hoặc theo yêu cầu đơn giản là đúng câu nào tính câu đó.
+                    // Ở đây tính: Nếu đúng hết 4 ý con thì mới được tính là đúng 1 câu.
+                    let correctSub = 0;
+                    q.answers.forEach((ans, subI) => {
+                        if(userAns[subI] === ans) correctSub++;
+                    });
+                    if(correctSub === 4) score++;
+                });
+            }
+
+            document.getElementById('screen-3').classList.add('hidden');
+            document.getElementById('timer-box').classList.add('hidden');
+            document.getElementById('screen-4').classList.remove('hidden');
+            document.getElementById('score-text').innerText = `${score}/${total}`;
+        }
+    </script>
+</body>
+</html>
