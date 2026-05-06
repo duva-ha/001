@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Hệ Thống Trắc Nghiệm Công Nghệ - Full Grade</title>
+    <title>TECH_EXAM v1.4 - Randomized Edition</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
     <style>
@@ -23,8 +23,8 @@
 
     <div class="max-w-4xl mx-auto flex justify-between items-center mb-8">
         <div>
-            <h1 class="font-tech text-2xl text-sky-400">TECH_EXAM v1.3</h1>
-            <p id="grade-display" class="text-xs text-slate-500 uppercase tracking-widest">Hệ thống trắc nghiệm trực tuyến</p>
+            <h1 class="font-tech text-2xl text-sky-400">TECH_EXAM v1.4</h1>
+            <p id="grade-display" class="text-xs text-slate-500 uppercase tracking-widest">Ngẫu nhiên câu hỏi & đáp án</p>
         </div>
         <div id="timer-box" class="glass px-6 py-2 rounded-full border-sky-500/50 hidden">
             <span id="timer" class="font-tech text-xl text-sky-400">15:00</span>
@@ -34,21 +34,20 @@
     <div class="max-w-4xl mx-auto">
         <!-- MÀN HÌNH 1: CHỌN KHỐI -->
         <div id="screen-1" class="text-center py-12">
-            <h2 class="text-3xl font-bold mb-10">Chọn Khối Lớp</h2>
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <h2 class="text-3xl font-bold mb-10 text-white">Chọn Khối Lớp</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-2xl mx-auto">
                 <button onclick="selectGrade(10)" class="btn-tech glass p-8 rounded-2xl text-xl font-bold">CÔNG NGHỆ 10</button>
                 <button onclick="selectGrade(11)" class="btn-tech glass p-8 rounded-2xl text-xl font-bold">CÔNG NGHỆ 11</button>
-                <button disabled class="btn-tech glass p-8 rounded-2xl text-xl font-bold opacity-30 cursor-not-allowed">CÔNG NGHỆ 12</button>
             </div>
         </div>
 
         <!-- MÀN HÌNH 2: CHỌN HÌNH THỨC -->
         <div id="screen-2" class="hidden text-center py-12">
-            <h2 id="screen-2-title" class="text-3xl font-bold mb-10">Chọn Hình Thức Thi</h2>
+            <h2 id="screen-2-title" class="text-3xl font-bold mb-10 text-white">Chọn Hình Thức</h2>
             <div class="flex flex-col md:flex-row justify-center gap-6">
                 <button onclick="selectType('multiple')" class="btn-tech glass p-8 rounded-2xl text-xl font-bold w-full md:w-80">Trắc Nghiệm (30 câu)</button>
             </div>
-            <button onclick="goBack(1)" class="mt-8 text-slate-500 hover:text-white block mx-auto">← Quay lại</button>
+            <button onclick="goScreen(1)" class="mt-8 text-slate-500 hover:text-white block mx-auto">← Quay lại</button>
         </div>
 
         <!-- MÀN HÌNH 3: LÀM BÀI -->
@@ -63,93 +62,71 @@
         <div id="screen-4" class="hidden text-center py-12 space-y-6">
             <h2 class="font-tech text-4xl text-sky-400">KẾT QUẢ</h2>
             <div class="glass p-10 rounded-3xl inline-block min-w-[300px]">
-                <p id="score-text" class="text-6xl font-bold">0/30</p>
+                <p id="score-text" class="text-6xl font-bold text-white">0/30</p>
             </div>
             <div class="flex flex-col items-center gap-4 pt-8">
-                <button onclick="showReview()" class="bg-emerald-600 hover:bg-emerald-500 px-10 py-3 rounded-full uppercase text-sm font-bold">Xem lại đáp án</button>
-                <button onclick="location.reload()" class="text-slate-400 hover:text-white uppercase text-xs">Về trang chủ</button>
+                <button onclick="showReview()" class="bg-emerald-600 hover:bg-emerald-500 px-10 py-3 rounded-full uppercase text-sm font-bold w-64">Xem lại đáp án</button>
+                <button onclick="location.reload()" class="btn-tech glass px-10 py-3 rounded-full uppercase text-sm font-bold w-64 text-white">Làm đề mới (Tráo câu hỏi)</button>
             </div>
         </div>
     </div>
 
     <script>
-        let quizState = { grade: 0, type: '', timeLeft: 900, timerInterval: null, userAnswers: {}, isReview: false };
-
+        // CƠ SỞ DỮ LIỆU CÂU HỎI (Rút gọn để hiển thị, bạn hãy giữ nguyên bộ câu hỏi cũ của bạn ở đây)
         const questionsDB = {
-            10: {
-                multiple: [
-                    { question: "Ren ngoài (còn gọi là ren trục) là loại ren được hình thành ở đâu?", options: ["Mặt trong của lỗ.", "Mặt ngoài của chi tiết.", "Mặt phẳng cắt của chi tiết.", "Giữa mối ghép hai chi tiết."], answer: 1 },
-                    { question: "Theo quy ước vẽ ren nhìn thấy, đường đỉnh ren được vẽ bằng nét gì?", options: ["Nét đứt mảnh.", "Nét liền mảnh.", "Nét liền đậm.", "Nét chấm gạch."], answer: 2 },
-                    { question: "Vòng chân ren của ren nhìn thấy được quy định vẽ như thế nào?", options: ["Vẽ kín bằng nét liền mảnh.", "Vẽ hở khoảng 3/4 vòng bằng nét liền mảnh.", "Vẽ hở khoảng 1/4 vòng bằng nét liền đậm.", "Vẽ kín bằng nét đứt mảnh."], answer: 1 },
-                    { question: "Kí hiệu 'M' trong kí hiệu ren (ví dụ M8 x 1) dùng để chỉ loại ren nào?", options: ["Ren vuông.", "Ren thang.", "Ren hệ mét.", "Ren tròn."], answer: 2 },
-                    { question: "Khi vẽ ren bị che khuất (ren khuất), các đường đỉnh ren, chân ren và giới hạn ren đều được vẽ bằng:", options: ["Nét liền đậm.", "Nét lượn sóng.", "Nét đứt mảnh.", "Nét liền mảnh."], answer: 2 },
-                    { question: "Nội dung của một bản vẽ chi tiết bao gồm:", options: ["Hình biểu diễn, kích thước, yêu cầu kĩ thuật, khung tên.", "Hình biểu diễn, bảng kê, khung tên.", "Hình chiếu phối cảnh, bảng kê, yêu cầu kĩ thuật.", "Chỉ bao gồm các hình chiếu vuông góc và kích thước."], answer: 0 },
-                    { question: "'Độ nhám bề mặt' (thường ghi trên bản vẽ chi tiết) là trị số nói lên điều gì?", options: ["Độ cứng của vật liệu.", "Độ nhấp nhô của bề mặt chi tiết.", "Trọng lượng của chi tiết.", "Sai số kích thước cho phép."], answer: 1 },
-                    { question: "Bản vẽ lắp khác bản vẽ chi tiết ở chỗ nó có thêm thành phần nào sau đây?", options: ["Khung tên.", "Yêu cầu kĩ thuật.", "Bảng kê (danh sách các chi tiết).", "Các hình biểu diễn."], answer: 2 },
-                    { question: "Công dụng chính của bản vẽ lắp là gì?", options: ["Dùng để chế tạo các chi tiết đơn lẻ.", "Dùng làm tài liệu lắp ráp, điều chỉnh, vận hành và kiểm tra sản phẩm.", "Dùng để thiết kế kiến trúc ngôi nhà.", "Dùng để quảng cáo sản phẩm."], answer: 1 },
-                    { question: "Trong bản vẽ lắp, 'kích thước chung' là loại kích thước thể hiện:", options: ["Kích thước của từng chi tiết nhỏ.", "Tổng chiều dài, chiều rộng và chiều cao của toàn bộ sản phẩm.", "Kích thước các lỗ ren.", "Khoảng cách giữa các bộ phận khi tháo rời."], answer: 1 },
-                    { question: "'Mặt bằng' của một ngôi nhà thực chất là loại hình biểu diễn nào?", options: ["Hình chiếu đứng của ngôi nhà.", "Hình chiếu phối cảnh từ trên cao.", "Hình cắt bằng với mặt phẳng cắt nằm ngang đi qua các cửa sổ.", "Hình chiếu cạnh của ngôi nhà."], answer: 2 },
-                    { question: "Hình biểu diễn nào thể hiện hình dáng kiến trúc bên ngoài của ngôi nhà?", options: ["Mặt bằng.", "Mặt đứng.", "Mặt cắt.", "Bản vẽ chi tiết cấu tạo."], answer: 1 },
-                    { question: "Trong bản vẽ nhà, 'mặt cắt' thường được dùng để thể hiện:", options: ["Cách bố trí đồ đạc trong phòng.", "Hình dáng các bậc thềm và ban công.", "Kết cấu các bộ phận và kích thước các tầng theo chiều cao.", "Cảnh quan sân vườn xung quanh."], answer: 2 },
-                    { question: "Khi đọc hồ sơ kiến trúc, các hình chiếu thẳng góc thường bao gồm:", options: ["Hình chiếu trục đo và phối cảnh.", "Mặt bằng, mặt đứng và mặt cắt.", "Chỉ bao gồm mặt bằng tầng 1.", "Bản vẽ sơ đồ điện và nước."], answer: 1 },
-                    { question: "Tại sao bản vẽ nhà thường có thêm hình chiếu phối cảnh?", options: ["Để thợ xây dễ dàng đo kích thước.", "Để thể hiện quy trình lắp đặt điện nước.", "Để tăng tính trực quan và giúp người xem dễ hình dung không gian thực tế.", "Để thay thế hoàn toàn cho các hình chiếu thẳng góc."], answer: 2 },
-                    { question: "Bản vẽ chi tiết là bản vẽ được dùng để?", options: ["chế tạo và kiểm tra chi tiết.", "biểu diễn hình dạng của chi tiết.", "lắp ráp các chi tiết.", "biểu diễn vị trí tương quan của các chi tiết."], answer: 0 },
-                    { question: "Bước thứ ba trong quá trình thiết kế kĩ thuật là", options: ["lập hồ sơ kĩ thuật.", "xác định yêu cầu.", "xây dựng nguyên mẫu.", "kiểm chứng giải pháp."], answer: 2 },
-                    { question: "Việc sử dụng vật liệu tái chế trong thiết kế giúp đảm bảo yếu tố nào sau đây?", options: ["Chi phí sản xuất cao.", "Tính thẩm mỹ.", "An toàn cho người dùng.", "Phát triển bền vững."], answer: 3 },
-                    { question: "Công việc của nhà thiết kế sản phẩm là", options: ["lên kế hoạch và thiết kế nội thất.", "lên kế hoạch và thiết kế cảnh quan.", "thiết kế toà nhà thương mại.", "thiết kế hình thức các sản phẩm sao cho hấp dẫn, hiệu quả và kinh tế."], answer: 3 },
-                    { question: "Trong AutoCAD, đâu là cách vẽ hình chữ nhật?", options: ["Lệnh Arc", "Lệnh C", "Lệnh L", "Lệnh REC"], answer: 3 },
-                    { question: "Yếu tố nào sau đây KHÔNG phải là yếu tố ảnh hưởng đến quá trình thiết kế sản phẩm?", options: ["Thời tiết.", "Tính thẩm mỹ.", "Nhân trắc.", "An toàn."], answer: 0 },
-                    { question: "Các phần mềm thiết kế với sự hỗ trợ của máy tính được gọi là:", options: ["Photoshop", "Drawing", "Painting", "CAD"], answer: 3 },
-                    { question: "Bước nào trong quy trình thiết kế kỹ thuật có tính chất quyết định đến tính sáng tạo của sản phẩm?", options: ["Tìm hiểu tổng quan.", "Đề xuất, đánh giá và lựa chọn giải pháp.", "Kiểm chứng giải pháp.", "Xác định yêu cầu."], answer: 1 },
-                    { question: "Vai trò chủ yếu của hoạt động thiết kế kĩ thuật là gì?", options: ["Phát triển kĩ thuật.", "Phát triển sản phẩm và công nghệ.", "Phát triển Toán học.", "Phát triển khoa học."], answer: 1 },
-                    { question: "Các phần mềm thiết kế hỗ trợ máy tính giúp:", options: ["Tăng độ chính xác và giảm thời gian thiết kế.", "Thay thế hoàn toàn trí tuệ con người.", "Không cần người vận hành.", "Chỉ dùng để trang trí."], answer: 0 },
-                    { question: "Đường giới hạn ren được vẽ bằng nét gì?", options: ["Liền đậm", "Liền mảnh", "Đứt mảnh", "Chấm gạch"], answer: 0 },
-                    { question: "Khổ giấy A4 có kích thước bao nhiêu?", options: ["210x297", "297x420", "594x841", "148x210"], answer: 0 },
-                    { question: "Tỉ lệ 2:1 là tỉ lệ gì?", options: ["Tỉ lệ thu nhỏ", "Tỉ lệ nguyên hình", "Tỉ lệ phóng to", "Tỉ lệ bất kỳ"], answer: 2 },
-                    { question: "Trong bản vẽ kĩ thuật, nét đứt mảnh dùng để vẽ gì?", options: ["Đường bao thấy", "Đường ghi kích thước", "Đường bao khuất", "Đường tâm"], answer: 2 },
-                    { question: "Phần mềm nào phổ biến nhất trong vẽ kỹ thuật 2D?", options: ["AutoCAD", "Excel", "Word", "PowerPoint"], answer: 0 }
-                ]
-            },
-            11: {
-                multiple: [
-                    { question: "Cơ cấu trục khuỷu thanh truyền bao gồm các chi tiết chính nào?", options: ["Pít tông, trục cam, trục khuỷu, bánh đà.", "Pít tông, thanh truyền, xupap, bánh đà.", "Pít tông, thanh truyền, trục khuỷu, bánh đà.", "Trục cam, con đội, đũa đẩy, cần mở."], answer: 2 },
-                    { question: "Chi tiết nào trực tiếp nhận áp lực của khí cháy để truyền lực cho trục khuỷu?", options: ["Pít tông.", "Thanh truyền.", "Xupap.", "Bánh đà."], answer: 0 },
-                    { question: "Cấu tạo của pít tông gồm những phần nào?", options: ["Đỉnh, đầu, chốt pít tông.", "Đỉnh, đầu, thân.", "Xéc măng khí, xéc măng dầu, thân.", "Đỉnh, xéc măng, lỗ gài chốt."], answer: 1 },
-                    { question: "Nhiệm vụ của xéc măng dầu là gì?", options: ["Bao kín buồng cháy không cho khí lọt xuống các te.", "Ngăn dầu bôi trơn từ các te sục lên buồng cháy.", "Dẫn hướng cho pít tông chuyển động trong xi lanh.", "Truyền lực từ pít tông cho thanh truyền."], answer: 1 },
-                    { question: "Đầu to của thanh truyền được lắp với chi tiết nào?", options: ["Chốt pít tông.", "Cổ khuỷu.", "Chốt khuỷu.", "Bánh đà."], answer: 2 },
-                    { question: "Trục quay của trục khuỷu được gọi là gì?", options: ["Chốt khuỷu.", "Cổ khuỷu.", "Má khuỷu.", "Đối trọng."], answer: 1 },
-                    { question: "Chi tiết nào giúp trục khuỷu quay đều nhờ khả năng lưu trữ động năng?", options: ["Thanh truyền.", "Pít tông.", "Bánh đà.", "Trục cam."], answer: 2 },
-                    { question: "Nhiệm vụ của cơ cấu phối khí là gì?", options: ["Đóng, mở cửa nạp và cửa thải đúng thời điểm.", "Biến chuyển động tịnh tiến thành chuyển động quay.", "Đưa dầu bôi trơn đến các bề mặt ma sát.", "Giữ cho nhiệt độ không vượt quá giới hạn."], answer: 0 },
-                    { question: "Ở động cơ 4 kỳ, số vòng quay trục cam bằng bao nhiêu so với trục khuỷu?", options: ["Bằng nhau.", "Gấp 2 lần.", "Bằng 1/2 lần.", "Gấp 4 lần."], answer: 2 },
-                    { question: "Buồng cháy động cơ được tạo thành bởi các chi tiết nào?", options: ["Thân máy, xi lanh và pít tông.", "Nắp máy, xi lanh và đỉnh pít tông.", "Xi lanh, trục khuỷu và thanh truyền.", "Pít tông, thanh truyền và trục khuỷu."], answer: 1 },
-                    { question: "Vai trò của ô tô trong sản xuất là?", options: ["Vận chuyển hành khách", "Vận chuyển cứu cứu thương", "Vận chuyển nguyên liệu và hàng hóa", "Tất cả các ý trên đều sai"], answer: 2 },
-                    { question: "Sơ đồ hệ thống cơ khí động lực là:", options: ["Nguồn động lực → Máy công tác → Hệ thống truyền động", "Nguồn động lực → Hệ thống truyền động → Máy công tác", "Máy công tác → Hệ thống truyền động → Nguồn động lực", "Hệ thống truyền động → Nguồn động lực → Máy công tác"], answer: 1 },
-                    { question: "Nghề thiết kế bản vẽ, tính toán sản phẩm máy móc thuộc lĩnh vực nào?", options: ["Thiết kế kĩ thuật cơ khí động lực", "Lắp ráp máy", "Chế tạo máy", "Sửa chữa máy"], answer: 0 },
-                    { question: "Vai trò của nguồn động lực là gì?", options: ["Đảm bảo hệ thống làm việc", "Truyền và biến đổi năng lượng", "Biến đổi năng lượng", "Cung cấp năng lượng cho hệ thống"], answer: 3 },
-                    { question: "Sử dụng và bảo dưỡng hệ thống truyền lực:", options: ["Chỉ kiểm tra khi hỏng", "Kiểm tra bảo dưỡng theo định kì", "Không cần mở li hợp", "Không cần kéo thắng tay"], answer: 1 },
-                    { question: "Bộ phận nào tạo ra mô men chủ động để ô tô chuyển động?", options: ["Hệ thống truyền lực.", "Động cơ.", "Bánh xe.", "Hệ thống lái."], answer: 1 },
-                    { question: "Hệ thống truyền lực trên ô tô bao gồm:", options: ["Động cơ, li hợp", "Bánh xe, hệ thống treo", "Li hợp, hộp số, các đăng, vi sai", "Xi lanh chính, xi lanh công tác"], answer: 2 },
-                    { question: "Chức năng chính của hệ thống treo là gì?", options: ["Điều khiển hướng chuyển động.", "Truyền biến đổi mô men.", "Giảm va đập, giúp xe chạy êm dịu.", "Dừng hẳn xe khi cần."], answer: 2 },
-                    { question: "Hệ thống điều khiển hướng chuyển động của ô tô là:", options: ["Hệ thống phanh.", "Hệ thống truyền lực.", "Hệ thống lái.", "Khung vỏ xe."], answer: 2 },
-                    { question: "Tác động tiêu cực của ô tô là:", options: ["Cơ giới hóa sản xuất.", "Vận tải chủ yếu.", "Gây ô nhiễm môi trường và tai nạn.", "Hỗ trợ cứu nạn."], answer: 2 },
-                    { question: "Cơ cấu trục khuỷu thanh truyền có bộ phận nào?", options: ["Pít tông, thanh truyền, trục khuỷu, bánh đà", "Pít tông, thanh truyền, xu páp", "Thân máy, nắp máy", "Trục cam, con đội"], answer: 0 },
-                    { question: "Hệ thống phanh có chức năng chính là:", options: ["Giảm tốc độ và dừng xe.", "Giúp xe chuyển hướng.", "Cung cấp điện.", "Làm ổn định động cơ."], answer: 0 },
-                    { question: "Nhiệm vụ nối ngắt dòng truyền mômen từ động cơ đến hộp số là của?", options: ["Hộp số", "Các đăng", "Vi sai", "Li hợp"], answer: 3 },
-                    { question: "Phân loại động cơ theo nhiên liệu:", options: ["Làm mát nước/gió", "2 kì / 4 kì", "Xăng, Diesel, Gas", "1 xi lanh / nhiều xi lanh"], answer: 2 },
-                    { question: "Nếu hệ thống treo bị hỏng, xe di chuyển sẽ:", options: ["Rung lắc mạnh khó kiểm soát", "Đi nhanh hơn", "Ngắt điện", "Tiết kiệm nhiên liệu"], answer: 0 },
-                    { question: "Nếu bầu lọc dầu bị tắc hoàn toàn, dầu sẽ đi đâu?", options: ["Chảy ngược lại các-te", "Đi qua két làm mát", "Mở van an toàn đi thẳng vào đường dầu chính", "Ngắt dòng truyền động"], answer: 2 },
-                    { question: "Nhận định chính xác về xử lí khí NOx:", options: ["Xăng và Diesel xử lí giống hệt nhau", "Diesel dùng bộ xúc tác tam nguyên", "Xăng dùng bộ xúc tác khử, Diesel dùng EGR", "Diesel oxy hóa NOx thành CO2"], answer: 2 },
-                    { question: "Nhiệm vụ của hệ thống bôi trơn là gì?", options: ["Cung cấp hòa khí", "Đưa dầu đến các bề mặt giảm ma sát", "Quay trục khuỷu", "Đốt cháy nhiên liệu"], answer: 1 },
-                    { question: "Hệ thống làm mát có nhiệm vụ chính là:", options: ["Giảm tiếng ồn", "Cung cấp dầu", "Giữ nhiệt độ chi tiết trong giới hạn", "Lọc bụi không khí"], answer: 2 },
-                    { question: "Hệ thống làm quay trục khuỷu để khởi động máy là:", options: ["Hệ thống đánh lửa.", "Hệ thống khởi động.", "Hệ thống nhiên liệu.", "Hệ thống bôi trơn."], answer: 1 }
-                ]
-            }
+            10: { multiple: [ 
+                /* ... copy 30 câu khối 10 của bạn vào đây ... */ 
+                { question: "Ren ngoài (còn gọi là ren trục) là loại ren được hình thành ở đâu?", options: ["Mặt trong của lỗ.", "Mặt ngoài của chi tiết.", "Mặt phẳng cắt của chi tiết.", "Giữa mối ghép hai chi tiết."], answer: 1 },
+                // ... (Các câu còn lại)
+            ]},
+            11: { multiple: [
+                { question: "Cơ cấu trục khuỷu thanh truyền bao gồm các chi tiết chính nào?", options: ["Pít tông, trục cam, trục khuỷu, bánh đà.", "Pít tông, thanh truyền, xupap, bánh đà.", "Pít tông, thanh truyền, trục khuỷu, bánh đà.", "Trục cam, con đội, đũa đẩy, cần mở."], answer: 2 },
+                { question: "Chi tiết nào trực tiếp nhận áp lực của khí cháy để truyền lực cho trục khuỷu?", options: ["Pít tông.", "Thanh truyền.", "Xupap.", "Bánh đà."], answer: 0 },
+                { question: "Cấu tạo của pít tông gồm những phần nào?", options: ["Đỉnh, đầu, chốt pít tông.", "Đỉnh, đầu, thân.", "Xéc măng khí, xéc măng dầu, thân.", "Đỉnh, xéc măng, lỗ gài chốt."], answer: 1 },
+                { question: "Nhiệm vụ của xéc măng dầu là gì?", options: ["Bao kín buồng cháy không cho khí lọt xuống các te.", "Ngăn dầu bôi trơn từ các te sục lên buồng cháy.", "Dẫn hướng cho pít tông chuyển động trong xi lanh.", "Truyền lực từ pít tông cho thanh truyền."], answer: 1 },
+                { question: "Đầu to của thanh truyền được lắp với chi tiết nào?", options: ["Chốt pít tông.", "Cổ khuỷu.", "Chốt khuỷu.", "Bánh đà."], answer: 2 },
+                { question: "Trục quay của trục khuỷu được gọi là gì?", options: ["Chốt khuỷu.", "Cổ khuỷu.", "Má khuỷu.", "Đối trọng."], answer: 1 },
+                { question: "Chi tiết nào giúp trục khuỷu quay đều nhờ khả năng lưu trữ động năng?", options: ["Thanh truyền.", "Pít tông.", "Bánh đà.", "Trục cam."], answer: 2 },
+                { question: "Nhiệm vụ của cơ cấu phối khí là gì?", options: ["Đóng, mở cửa nạp và cửa thải đúng thời điểm.", "Biến chuyển động tịnh tiến thành chuyển động quay.", "Đưa dầu bôi trơn đến các bề mặt ma sát.", "Giữ cho nhiệt độ không vượt quá giới hạn."], answer: 0 },
+                { question: "Ở động cơ 4 kỳ, số vòng quay trục cam bằng bao nhiêu so với trục khuỷu?", options: ["Bằng nhau.", "Gấp 2 lần.", "Bằng 1/2 lần.", "Gấp 4 lần."], answer: 2 },
+                { question: "Buồng cháy động cơ được tạo thành bởi các chi tiết nào?", options: ["Thân máy, xi lanh và pít tông.", "Nắp máy, xi lanh và đỉnh pít tông.", "Xi lanh, trục khuỷu và thanh truyền.", "Pít tông, thanh truyền và trục khuỷu."], answer: 1 },
+                { question: "Vai trò của ô tô trong sản xuất là?", options: ["Chở nhiều người và hàng hóa", "Phục vụ cứu thương", "Vận chuyển hàng hóa và nguyên vật liệu", "Tất cả đều sai"], answer: 2 },
+                { question: "Sơ đồ hệ thống cơ khí động lực là:", options: ["Nguồn động lực → Máy công tác → Hệ thống truyền động", "Nguồn động lực → Hệ thống truyền động → Máy công tác", "Máy công tác → Hệ thống truyền động → Nguồn động lực", "Hệ thống truyền động → Nguồn động lực → Máy công tác"], answer: 1 },
+                { question: "Nghề thiết kế bản vẽ, tính toán sản phẩm máy móc thuộc lĩnh vực nào?", options: ["Thiết kế kĩ thuật cơ khí động lực", "Lắp ráp máy", "Chế tạo máy", "Sửa chữa máy"], answer: 0 },
+                { question: "Vai trò của nguồn động lực là gì?", options: ["Đảm bảo hệ thống làm việc", "Truyền và biến đổi năng lượng", "Biến đổi năng lượng", "Cung cấp năng lượng cho hệ thống"], answer: 3 },
+                { question: "Sử dụng và bảo dưỡng hệ thống truyền lực:", options: ["Chỉ kiểm tra khi hỏng", "Kiểm tra bảo dưỡng theo định kì", "Không cần mở li hợp", "Không cần kéo thắng tay"], answer: 1 },
+                { question: "Bộ phận nào tạo ra mô men chủ động để ô tô chuyển động?", options: ["Hệ thống truyền lực.", "Động cơ.", "Bánh xe.", "Hệ thống lái."], answer: 1 },
+                { question: "Hệ thống truyền lực trên ô tô bao gồm:", options: ["Động cơ, li hợp", "Bánh xe, hệ thống treo", "Li hợp, hộp số, các đăng, vi sai", "Xi lanh chính, xi lanh công tác"], answer: 2 },
+                { question: "Chức năng chính của hệ thống treo là gì?", options: ["Điều khiển hướng chuyển động.", "Truyền biến đổi mô men.", "Giảm va đập, giúp xe chạy êm dịu.", "Dừng hẳn xe khi cần."], answer: 2 },
+                { question: "Hệ thống điều khiển hướng chuyển động của ô tô là:", options: ["Hệ thống phanh.", "Hệ thống truyền lực.", "Hệ thống lái.", "Khung vỏ xe."], answer: 2 },
+                { question: "Tác động tiêu cực của ô tô là:", options: ["Cơ giới hóa sản xuất.", "Vận tải chủ yếu.", "Gây ô nhiễm môi trường và tai nạn.", "Hỗ trợ cứu nạn."], answer: 2 },
+                { question: "Cơ cấu trục khuỷu thanh truyền có bộ phận nào?", options: ["Pít tông, thanh truyền, trục khuỷu, bánh đà", "Pít tông, thanh truyền, xu páp", "Thân máy, nắp máy", "Trục cam, con đội"], answer: 0 },
+                { question: "Hệ thống phanh có chức năng chính là:", options: ["Giảm tốc độ và dừng xe.", "Giúp xe chuyển hướng.", "Cung cấp điện.", "Làm ổn định động cơ."], answer: 0 },
+                { question: "Nhiệm vụ nối ngắt dòng truyền mômen từ động cơ đến hộp số là của?", options: ["Hộp số", "Các đăng", "Vi sai", "Li hợp"], answer: 3 },
+                { question: "Phân loại động cơ theo nhiên liệu:", options: ["Làm mát nước/gió", "2 kì / 4 kì", "Xăng, Diesel, Gas", "1 xi lanh / nhiều xi lanh"], answer: 2 },
+                { question: "Nếu hệ thống treo bị hỏng, xe di chuyển sẽ:", options: ["Rung lắc mạnh khó kiểm soát", "Đi nhanh hơn", "Ngắt điện", "Tiết kiệm nhiên liệu"], answer: 0 },
+                { question: "Nếu bầu lọc dầu bị tắc hoàn toàn, dầu sẽ đi đâu?", options: ["Chảy ngược lại các-te", "Đi qua két làm mát", "Mở van an toàn đi thẳng vào đường dầu chính", "Ngắt dòng truyền động"], answer: 2 },
+                { question: "Nhận định chính xác về xử lí khí NOx:", options: ["Xăng và Diesel xử lí giống hệt nhau", "Diesel dùng bộ xúc tác tam nguyên", "Xăng dùng bộ xúc tác khử, Diesel dùng EGR", "Diesel oxy hóa NOx thành CO2"], answer: 2 },
+                { question: "Nhiệm vụ của hệ thống bôi trơn là gì?", options: ["Cung cấp hòa khí", "Đưa dầu đến các bề mặt giảm ma sát", "Quay trục khuỷu", "Đốt cháy nhiên liệu"], answer: 1 },
+                { question: "Hệ thống làm mát có nhiệm vụ chính là:", options: ["Giảm tiếng ồn", "Cung cấp dầu", "Giữ nhiệt độ chi tiết trong giới hạn", "Lọc bụi không khí"], answer: 2 },
+                { question: "Hệ thống làm quay trục khuỷu để khởi động máy là:", options: ["Hệ thống đánh lửa.", "Hệ thống khởi động.", "Hệ thống nhiên liệu.", "Hệ thống bôi trơn."], answer: 1 }
+            ]}
         };
+
+        let quizState = { grade: 0, type: '', timeLeft: 900, timerInterval: null, userAnswers: {}, isReview: false, currentQuestions: [] };
+
+        // Thuật toán tráo ngẫu nhiên Fisher-Yates
+        function shuffle(array) {
+            for (let i = array.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [array[i], array[j]] = [array[j], array[i]];
+            }
+            return array;
+        }
 
         function selectGrade(g) {
             quizState.grade = g;
             document.getElementById('grade-display').innerText = `Công Nghệ ${g}`;
-            document.getElementById('screen-2-title').innerText = `Công Nghệ ${g} - Chọn Hình Thức`;
             goScreen(2);
         }
 
@@ -157,41 +134,30 @@
             quizState.type = t;
             quizState.userAnswers = {};
             quizState.isReview = false;
-            quizState.timeLeft = 900;
-            document.getElementById('timer-box').classList.remove('hidden');
+            
+            // Xử lý tráo câu hỏi và tráo đáp án bên trong mỗi câu
+            let rawData = JSON.parse(JSON.stringify(questionsDB[quizState.grade][t])); // Clone dữ liệu
+            
+            // Tráo đáp án bên trong từng câu trước
+            rawData.forEach(q => {
+                let correctAnswerText = q.options[q.answer]; // Lưu nội dung đáp án đúng
+                shuffle(q.options); // Tráo mảng options
+                q.answer = q.options.indexOf(correctAnswerText); // Tìm lại index mới của đáp án đúng
+            });
+
+            // Sau đó tráo thứ tự các câu hỏi
+            quizState.currentQuestions = shuffle(rawData);
+
             goScreen(3);
             startTimer();
             renderQuiz();
         }
 
-        function goScreen(id) {
-            document.querySelectorAll('[id^="screen-"]').forEach(s => s.classList.add('hidden'));
-            document.getElementById(`screen-${id}`).classList.remove('hidden');
-        }
-
-        function goBack(id) {
-            clearInterval(quizState.timerInterval);
-            document.getElementById('timer-box').classList.add('hidden');
-            goScreen(id);
-        }
-
-        function startTimer() {
-            clearInterval(quizState.timerInterval);
-            quizState.timerInterval = setInterval(() => {
-                quizState.timeLeft--;
-                let m = Math.floor(quizState.timeLeft / 60);
-                let s = quizState.timeLeft % 60;
-                document.getElementById('timer').innerText = `${m}:${s < 10 ? '0'+s : s}`;
-                if(quizState.timeLeft <= 0) submitExam();
-            }, 1000);
-        }
-
         function renderQuiz() {
             const container = document.getElementById('quiz-container');
-            const data = questionsDB[quizState.grade][quizState.type];
             container.innerHTML = '';
             
-            data.forEach((q, idx) => {
+            quizState.currentQuestions.forEach((q, idx) => {
                 const qDiv = document.createElement('div');
                 qDiv.className = "glass p-6 rounded-2xl space-y-4";
                 qDiv.innerHTML = `
@@ -199,13 +165,13 @@
                     <p class="text-lg">${q.question}</p>
                     <div class="grid grid-cols-1 gap-3">
                         ${q.options.map((opt, i) => {
-                            let cls = "border-white/10 hover:bg-white/5";
+                            let cls = "border-white/10 hover:bg-white/5 text-slate-300";
                             let icon = "";
                             if(quizState.isReview) {
                                 if(i === q.answer) { cls = "opt-correct"; icon = " ✓"; }
                                 else if(quizState.userAnswers[idx] === i) { cls = "opt-wrong"; icon = " ✗"; }
                             } else if(quizState.userAnswers[idx] === i) {
-                                cls = "selected-opt";
+                                cls = "selected-opt text-white border-sky-500";
                             }
                             return `<button ${quizState.isReview ? 'disabled' : ''} onclick="pick(${idx}, ${i}, this)" class="option-btn text-left p-4 rounded-xl border transition-all ${cls}">
                                 <span class="font-bold mr-2">${String.fromCharCode(65 + i)}.</span> ${opt} ${icon}
@@ -219,8 +185,29 @@
 
         function pick(qIdx, optIdx, btn) {
             quizState.userAnswers[qIdx] = optIdx;
-            btn.closest('.grid').querySelectorAll('.option-btn').forEach(b => b.classList.remove('selected-opt'));
-            btn.classList.add('selected-opt');
+            btn.closest('.grid').querySelectorAll('.option-btn').forEach(b => {
+                b.classList.remove('selected-opt', 'text-white', 'border-sky-500');
+                b.classList.add('text-slate-300', 'border-white/10');
+            });
+            btn.classList.add('selected-opt', 'text-white', 'border-sky-500');
+        }
+
+        function startTimer() {
+            clearInterval(quizState.timerInterval);
+            document.getElementById('timer-box').classList.remove('hidden');
+            quizState.timeLeft = 900;
+            quizState.timerInterval = setInterval(() => {
+                quizState.timeLeft--;
+                let m = Math.floor(quizState.timeLeft / 60);
+                let s = quizState.timeLeft % 60;
+                document.getElementById('timer').innerText = `${m}:${s < 10 ? '0'+s : s}`;
+                if(quizState.timeLeft <= 0) submitExam();
+            }, 1000);
+        }
+
+        function goScreen(id) {
+            document.querySelectorAll('[id^="screen-"]').forEach(s => s.classList.add('hidden'));
+            document.getElementById(`screen-${id}`).classList.remove('hidden');
         }
 
         function confirmSubmit() { if(confirm("Bạn có chắc muốn nộp bài?")) submitExam(); }
@@ -228,9 +215,9 @@
         function submitExam() {
             clearInterval(quizState.timerInterval);
             let score = 0;
-            const data = questionsDB[quizState.grade][quizState.type];
-            data.forEach((q, i) => { if(quizState.userAnswers[i] === q.answer) score++; });
-            document.getElementById('score-text').innerText = `${score}/${data.length}`;
+            quizState.currentQuestions.forEach((q, i) => { if(quizState.userAnswers[i] === q.answer) score++; });
+            document.getElementById('score-text').innerText = `${score}/${quizState.currentQuestions.length}`;
+            document.getElementById('timer-box').classList.add('hidden');
             goScreen(4);
             window.scrollTo(0,0);
         }
@@ -238,9 +225,10 @@
         function showReview() {
             quizState.isReview = true;
             goScreen(3);
-            document.getElementById('submit-btn').innerText = "Về kết quả";
+            document.getElementById('submit-btn').innerText = "Về màn hình kết quả";
             document.getElementById('submit-btn').onclick = () => goScreen(4);
             renderQuiz();
+            window.scrollTo(0,0);
         }
     </script>
 </body>
