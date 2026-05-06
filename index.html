@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>TECH_EXAM v1.7 - Full Database</title>
+    <title>TECH_EXAM v1.8 - Update Grade 11</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
     <style>
@@ -24,11 +24,8 @@
 
     <div class="max-w-4xl mx-auto flex justify-between items-center mb-8">
         <div>
-            <h1 class="font-tech text-2xl text-sky-400">TECH_EXAM v1.7</h1>
-            <p id="grade-display" class="text-xs text-slate-500 uppercase tracking-widest">Đầy đủ 45 câu hỏi Khối 10</p>
-        </div>
-        <div id="timer-box" class="glass px-6 py-2 rounded-full border-sky-500/50 hidden">
-            <span id="timer" class="font-tech text-xl text-sky-400">15:00</span>
+            <h1 class="font-tech text-2xl text-sky-400">TECH_EXAM v1.8</h1>
+            <p id="grade-display" class="text-xs text-slate-500 uppercase tracking-widest">Hệ thống ôn tập Công nghệ</p>
         </div>
     </div>
 
@@ -44,16 +41,10 @@
 
         <!-- SCREEN 2: TYPE -->
         <div id="screen-2" class="hidden text-center py-12">
-            <h2 id="screen-2-title" class="text-3xl font-bold mb-10 text-sky-400">CHỌN HÌNH THỨC ÔN TẬP</h2>
+            <h2 id="screen-2-title" class="text-3xl font-bold mb-10 text-sky-400">CHỌN HÌNH THỨC</h2>
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-2xl mx-auto">
-                <button onclick="prepareQuiz('multiple')" class="btn-tech glass p-8 rounded-2xl">
-                    <p class="text-xl font-bold">Trắc nghiệm</p>
-                    <p class="text-sm text-slate-400 mt-2">1 đáp án (30 câu)</p>
-                </button>
-                <button id="tf-btn" onclick="prepareQuiz('tf')" class="btn-tech glass p-8 rounded-2xl">
-                    <p class="text-xl font-bold">Đúng / Sai</p>
-                    <p class="text-sm text-slate-400 mt-2">Nhiều ý (15 câu)</p>
-                </button>
+                <button onclick="prepareQuiz('multiple')" class="btn-tech glass p-8 rounded-2xl text-xl font-bold">Trắc nghiệm 1 đáp án</button>
+                <button onclick="prepareQuiz('tf')" class="btn-tech glass p-8 rounded-2xl text-xl font-bold">Trắc nghiệm Đúng/Sai</button>
             </div>
             <button onclick="goScreen(1)" class="mt-8 text-slate-500 hover:text-white">← Quay lại chọn khối</button>
         </div>
@@ -68,10 +59,10 @@
 
         <!-- SCREEN 4: RESULT -->
         <div id="screen-4" class="hidden text-center py-12">
-            <h2 class="font-tech text-4xl text-sky-400 mb-6">HOÀN THÀNH</h2>
+            <h2 class="font-tech text-4xl text-sky-400 mb-6">KẾT QUẢ</h2>
             <div class="glass p-10 rounded-3xl inline-block mb-8">
                 <p id="score-text" class="text-6xl font-bold">0/0</p>
-                <p class="text-slate-400 mt-2">Điểm số của bạn</p>
+                <p class="text-slate-400 mt-2">Câu đúng</p>
             </div>
             <div class="flex flex-col items-center gap-4">
                 <button onclick="showReview()" class="bg-emerald-600 hover:bg-emerald-500 px-10 py-3 rounded-full font-bold w-64">XEM LẠI ĐÁP ÁN</button>
@@ -93,14 +84,14 @@
                     { question: "Đường chân ren được vẽ bằng nét gì?", options: ["Liền đậm", "Liền mảnh", "Đứt mảnh", "Gạch chấm mảnh"], answer: 1 },
                     { question: "Trong bản vẽ kĩ thuật, đơn vị độ dài thường dùng là?", options: ["cm", "mm", "m", "dm"], answer: 1 },
                     { question: "Hình cắt dùng để làm gì?", options: ["Biểu diễn hình dạng bên ngoài", "Biểu diễn cấu tạo bên trong", "Biểu diễn kích thước", "Biểu diễn yêu cầu kĩ thuật"], answer: 1 },
-                    { question: "Ren trong (ren lỗ) nhìn từ phía ngoài vào, đường đỉnh ren vẽ bằng nét gì?", options: ["Liền mảnh", "Liền đậm", "Đứt mảnh", "Gạch chấm"], answer: 1 },
+                    { question: "Ren trong nhìn từ phía ngoài vào, đường đỉnh ren vẽ bằng nét gì?", options: ["Liền mảnh", "Liền đậm", "Đứt mảnh", "Gạch chấm"], answer: 1 },
                     { question: "Bản vẽ chi tiết bao gồm các nội dung nào?", options: ["Hình biểu diễn, kích thước, yêu cầu kĩ thuật, khung tên", "Hình biểu diễn, bảng kê, khung tên", "Hình biểu diễn, kích thước, bảng kê", "Yêu cầu kĩ thuật, bảng kê, hình cắt"], answer: 0 },
                     { question: "Bảng kê có trong loại bản vẽ nào?", options: ["Bản vẽ chi tiết", "Bản vẽ lắp", "Bản vẽ nhà", "Bản vẽ cơ sở"], answer: 1 },
                     { question: "Mặt bằng của bản vẽ nhà dùng để làm gì?", options: ["Biểu diễn chiều cao ngôi nhà", "Biểu diễn vị trí tường, cửa, thiết bị", "Biểu diễn hình dáng mái nhà", "Biểu diễn cấu tạo móng"], answer: 1 },
                     { question: "Lệnh 'Line' trong AutoCAD dùng để vẽ gì?", options: ["Đường tròn", "Đoạn thẳng", "Hình chữ nhật", "Cung tròn"], answer: 1 },
                     { question: "Thiết kế kĩ thuật là gì?", options: ["Quá trình sản xuất sản phẩm", "Hoạt động sáng tạo giải quyết vấn đề bằng công nghệ", "Việc mua bán sản phẩm", "Việc sửa chữa máy móc"], answer: 1 },
                     { question: "Bước đầu tiên của quy trình thiết kế kĩ thuật là gì?", options: ["Xây dựng nguyên mẫu", "Xác định vấn đề", "Tìm hiểu tổng quan", "Xác định yêu cầu"], answer: 1 },
-                    { question: "Yếu tố nhân trắc học trong thiết kế là gì?", options: ["Giá thành sản phẩm", "Sự phù hợp với cơ thể con người", "Màu sắc sản phẩm", "Độ bền vật liệu"], answer: 1 },
+                    { question: "Y yếu tố nhân trắc học trong thiết kế là gì?", options: ["Giá thành sản phẩm", "Sự phù hợp với cơ thể con người", "Màu sắc sản phẩm", "Độ bền vật liệu"], answer: 1 },
                     { question: "Vòng đời sản phẩm kết thúc ở giai đoạn nào?", options: ["Sử dụng", "Bảo trì", "Thải loại/Tái chế", "Sản xuất"], answer: 2 },
                     { question: "Hồ sơ kĩ thuật bao gồm gì?", options: ["Chỉ có bản vẽ", "Chỉ có thuyết minh", "Bản vẽ, thuyết minh và các tài liệu liên quan", "Mẫu thử sản phẩm"], answer: 2 },
                     { question: "Nguyên tắc đơn giản hóa trong thiết kế giúp gì?", options: ["Tăng tính thẩm mỹ cực cao", "Dễ sản xuất và sửa chữa", "Tăng giá thành", "Sử dụng nhiều chi tiết phức tạp"], answer: 1 },
@@ -175,40 +166,104 @@
                         { t: "Vật liệu thông minh có khả năng thay đổi tính chất theo môi trường đang là xu hướng thiết kế mới.", a: "Đ" },
                         { t: "Thiết kế kỹ thuật hiện đại không cần quan tâm đến vấn đề rác thải sau khi sản phẩm hết vòng đời.", a: "S" },
                         { t: "Sử dụng phần mềm mô phỏng giúp dự đoán các hư hỏng trước khi sản xuất thực tế.", a: "Đ" }
-                    ]},
-                    { q: "Câu 11. Các yếu tố ảnh hưởng đến thiết kế kĩ thuật:", sub: [
-                        { t: "Vòng đời sản phẩm bao gồm các giai đoạn: sản xuất, sử dụng và thải loại.", a: "Đ" },
-                        { t: "Các yếu tố ảnh hưởng gồm: Thẩm mỹ, nhân trắc, an toàn, vòng đời, bền vững, công nghệ, tài chính.", a: "Đ" },
-                        { t: "Công nghệ mới không giúp ích gì cho bảo vệ môi trường.", a: "S" },
-                        { t: "Phát triển bền vững là đáp ứng nhu cầu hiện tại mà không hại đến tương lai.", a: "Đ" }
-                    ]},
-                    { q: "Câu 12. Ý kiến về nguyên tắc thiết kế kĩ thuật:", sub: [
-                        { t: "Tiết kiệm tài nguyên là một nguyên tắc phát triển bền vững.", a: "Đ" },
-                        { t: "Thiết kế kĩ thuật chỉ dựa trên cảm hứng, không cần toán học.", a: "S" },
-                        { t: "Công nghệ sau thường có ưu điểm vượt trội hơn công nghệ cũ cùng loại.", a: "Đ" },
-                        { t: "Quy trình thiết kế kết thúc ngay sau khi có giải pháp trên giấy.", a: "S" }
-                    ]},
-                    { q: "Câu 13. Nhận định về quy trình thiết kế:", sub: [
-                        { t: "Quy trình thiết kế kĩ thuật luôn xong ngay lần đầu thử nghiệm.", a: "S" },
-                        { t: "Nguyên mẫu là phiên bản thử nghiệm để đánh giá giải pháp.", a: "Đ" },
-                        { t: "Xác định vấn đề là bước làm rõ nhu cầu hoặc khó khăn.", a: "Đ" },
-                        { t: "Hồ sơ kĩ thuật được lập ở bước cuối cùng.", a: "Đ" }
-                    ]},
-                    { q: "Câu 14. Quy ước vẽ ren và bản vẽ:", sub: [
-                        { t: "Đường chân ren vẽ bằng nét liền mảnh.", a: "Đ" },
-                        { t: "Bản vẽ chi tiết có bảng kê.", a: "S" },
-                        { t: "M10x1: M là ren hệ mét, 10 là đường kính, 1 là bước ren.", a: "Đ" },
-                        { t: "Hình cắt giúp thấy cấu tạo bên trong chi tiết.", a: "Đ" }
-                    ]},
-                    { q: "Câu 15. Thiết kế và phần mềm hỗ trợ:", sub: [
-                        { t: "CAD giúp chỉnh sửa bản vẽ nhanh và chính xác hơn vẽ tay.", a: "Đ" },
-                        { t: "Yếu tố nhân trắc là nghiên cứu về tài chính dự án.", a: "S" },
-                        { t: "Nếu kiểm chứng thất bại, cần quay lại các bước trước để sửa đổi.", a: "Đ" },
-                        { t: "Thiết kế kỹ thuật hiện đại rất coi trọng tính bền vững môi trường.", a: "Đ" }
                     ]}
                 ]
             },
-            11: { multiple: [], tf: [] }
+            11: {
+                multiple: [],
+                tf: [
+                    { q: "Câu 1. Nhận định về cấu tạo và nguyên lý của động cơ đốt trong:", sub: [
+                        { t: "Điểm chết là vị trí mà tại đó piston đổi chiều chuyển động.", a: "Đ" },
+                        { t: "Ở động cơ 4 kỳ, trục khuỷu quay 1 vòng (360°) để thực hiện hết một chu trình làm việc.", a: "S" },
+                        { t: "Thể tích công tác là thể tích xi lanh khi piston ở điểm chết dưới.", a: "S" },
+                        { t: "Buồng cháy là thể tích không gian giới hạn bởi nắp máy, xi lanh và đỉnh piston khi piston ở điểm chết trên.", a: "Đ" }
+                    ]},
+                    { q: "Câu 2. Về thân máy và nắp máy:", sub: [
+                        { t: "Thân máy và nắp máy là 'khung xương' để lắp đặt tất cả các cơ cấu và hệ thống của động cơ.", a: "Đ" },
+                        { t: "Nắp máy của động cơ làm mát bằng nước không có áo nước làm mát.", a: "S" },
+                        { t: "Cánh tản nhiệt được đúc trên thân máy và nắp máy của động cơ làm mát bằng không khí.", a: "Đ" },
+                        { t: "Thân xi lanh có thể được đúc rời (gọi là lót xi lanh) để dễ dàng thay thế khi bị mòn.", a: "Đ" }
+                    ]},
+                    { q: "Câu 3. Đánh giá về cơ cấu trục khuỷu thanh truyền:", sub: [
+                        { t: "Piston có nhiệm vụ nhận lực giãn nở của khí cháy rồi truyền lực cho trục khuỷu để sinh công.", a: "Đ" },
+                        { t: "Thanh truyền là chi tiết trung gian nối giữa piston và trục khuỷu.", a: "Đ" },
+                        { t: "Trục khuỷu nhận lực từ thanh truyền để tạo ra mô men quay kéo máy công tác.", a: "Đ" },
+                        { t: "Chốt piston dùng để nối đầu to thanh truyền với piston.", a: "S" }
+                    ]},
+                    { q: "Câu 4. Về cơ cấu phối khí:", sub: [
+                        { t: "Cơ cấu phối khí có nhiệm vụ đóng, mở các cửa nạp, cửa thải đúng lúc.", a: "Đ" },
+                        { t: "Ở cơ cấu phối khí dùng xupap treo, xupap được lắp ở thân máy.", a: "S" },
+                        { t: "Trục cam nhận chuyển động quay từ trục khuỷu thông qua đai hoặc xích cam.", a: "Đ" },
+                        { t: "Số vòng quay của trục cam bằng một nửa số vòng quay của trục khuỷu ở động cơ 4 kỳ.", a: "Đ" }
+                    ]},
+                    { q: "Câu 5. Nhận định về hệ thống bôi trơn:", sub: [
+                        { t: "Hệ thống bôi trơn giúp giảm ma sát và mài mòn giữa các bề mặt chi tiết chuyển động.", a: "Đ" },
+                        { t: "Trong hệ thống bôi trơn cưỡng bức, dầu được đẩy đến các bề mặt ma sát nhờ áp suất của bơm dầu.", a: "Đ" },
+                        { t: "Dầu bôi trơn chỉ có tác dụng làm trơn mà không có tác dụng làm mát hay tẩy rửa chi tiết.", a: "S" },
+                        { t: "Bầu lọc dầu có nhiệm vụ giữ lại các tạp chất cơ học lẫn trong dầu bôi trơn.", a: "Đ" }
+                    ]},
+                    { q: "Câu 6. Đánh giá về hệ thống làm mát:", sub: [
+                        { t: "Hệ thống làm mát bằng nước loại tuần hoàn cưỡng bức sử dụng bơm nước để tạo sự lưu thông.", a: "Đ" },
+                        { t: "Van hằng nhiệt giúp điều chỉnh nhiệt độ nước làm mát bằng cách khống chế lượng nước đi qua két nước.", a: "Đ" },
+                        { t: "Khi nhiệt độ nước còn thấp, van hằng nhiệt sẽ mở cho nước chảy hoàn toàn về két nước để làm nguội.", a: "S" },
+                        { t: "Quạt gió trong hệ thống làm mát có tác dụng tăng tốc độ lưu thông của không khí qua két nước.", a: "Đ" }
+                    ]},
+                    { q: "Câu 7. Về hệ thống cung cấp nhiên liệu và không khí trong động cơ xăng:", sub: [
+                        { t: "Hệ thống phun xăng điện tử (EFI) sử dụng các cảm biến để điều khiển lượng xăng phun vào xi lanh tối ưu.", a: "Đ" },
+                        { t: "Bộ chế hòa khí có nhiệm vụ trộn xăng với không khí theo tỉ lệ nhất định trước khi đưa vào xi lanh.", a: "Đ" },
+                        { t: "Ở hệ thống phun xăng, xăng được phun trực tiếp vào đường ống nạp hoặc vào buồng cháy.", a: "Đ" },
+                        { t: "Bầu lọc khí có tác dụng loại bỏ bụi bẩn trong không khí trước khi đưa vào xi lanh.", a: "Đ" }
+                    ]},
+                    { q: "Câu 8. Về hệ thống cung cấp nhiên liệu trong động cơ Diesel:", sub: [
+                        { t: "Nhiên liệu Diesel được phun vào xi lanh ở cuối kỳ nạp dưới áp suất cao.", a: "S" },
+                        { t: "Bơm cao áp có nhiệm vụ cung cấp nhiên liệu với áp suất cao, đúng thời điểm cho vòi phun.", a: "Đ" },
+                        { t: "Vòi phun có nhiệm vụ phun tơi nhiên liệu vào buồng cháy để quá trình cháy tốt nhất.", a: "Đ" },
+                        { t: "Động cơ Diesel tự bốc cháy nhờ nén khí ở áp suất cao mà không cần bugi.", a: "Đ" }
+                    ]},
+                    { q: "Câu 9. Đánh giá về hệ thống đánh lửa:", sub: [
+                        { t: "Hệ thống đánh lửa chỉ có trên động cơ xăng, không có trên động cơ Diesel.", a: "Đ" },
+                        { t: "Nhiệm vụ của hệ thống đánh lửa là tạo ra tia lửa điện cao áp để châm cháy hòa khí đúng lúc.", a: "Đ" },
+                        { t: "Bugi là chi tiết trực tiếp tạo ra tia lửa điện bên trong buồng cháy.", a: "Đ" },
+                        { t: "Cuộn sơ cấp của biến áp đánh lửa có số vòng dây nhiều hơn cuộn thứ cấp.", a: "S" }
+                    ]},
+                    { q: "Câu 10. Về hệ thống truyền lực trên ô tô:", sub: [
+                        { t: "Hệ thống truyền lực truyền mô men quay từ động cơ đến các bánh xe chủ động.", a: "Đ" },
+                        { t: "Ly hợp dùng để nối hoặc ngắt truyền động từ động cơ đến hộp số một cách đột ngột.", a: "S" },
+                        { t: "Hộp số giúp thay đổi mô men quay, tốc độ và cho phép xe chạy lùi.", a: "Đ" },
+                        { t: "Truyền lực chính và bộ vi sai giúp các bánh xe chủ động quay với tốc độ khác nhau khi vào cua.", a: "Đ" }
+                    ]},
+                    { q: "Câu 11. Nhận định về ứng dụng của động cơ đốt trong:", sub: [
+                        { t: "Động cơ đốt trong là nguồn động lực phổ biến nhất cho ô tô, tàu thủy, máy bay.", a: "Đ" },
+                        { t: "Khi lắp cho máy nông nghiệp, cần có hệ thống truyền lực phù hợp đặc thù công việc.", a: "Đ" },
+                        { t: "Động cơ đốt trong không được sử dụng trong máy phát điện vì tiếng ồn.", a: "S" },
+                        { t: "Hiệu suất của động cơ đốt trong thường cao hơn động cơ điện.", a: "S" }
+                    ]},
+                    { q: "Câu 12. Về bảo dưỡng và sửa chữa động cơ:", sub: [
+                        { t: "Bảo dưỡng định kỳ giúp kéo dài tuổi thọ và đảm bảo an toàn vận hành.", a: "Đ" },
+                        { t: "Thay dầu máy và lọc dầu là công việc cần thực hiện định kỳ theo khuyến cáo.", a: "Đ" },
+                        { t: "Khi động cơ có tiếng gõ lạ, người dùng vẫn có thể tiếp tục vận hành bình thường.", a: "S" },
+                        { t: "Kiểm tra mực nước làm mát là cần thiết để tránh tình trạng động cơ bị quá nhiệt.", a: "Đ" }
+                    ]},
+                    { q: "Câu 13. Về nguyên lý làm việc của ĐCĐT (Học sinh trao đổi):", sub: [
+                        { t: "Động cơ Diesel không cần bugi vì hòa khí tự bốc cháy dưới áp suất và nhiệt độ cao.", a: "Đ" },
+                        { t: "Trong kì nén, piston dịch chuyển từ ĐCT xuống ĐCD.", a: "S" },
+                        { t: "Một chu trình động cơ 4 kỳ gồm: nạp, nén, cháy giãn nở và xả.", a: "Đ" },
+                        { t: "Thể tích buồng cháy Vs = S (Sai công thức).", a: "S" }
+                    ]},
+                    { q: "Câu 14. Vai trò của các hệ thống trong động cơ:", sub: [
+                        { t: "Xe gắn máy thông thường sử dụng hệ thống khởi động bằng khí nén.", a: "S" },
+                        { t: "Hệ thống xử lý khí thải giúp giảm chất độc hại trước khi thải ra môi trường.", a: "Đ" },
+                        { t: "Hệ thống làm mát chia làm hai loại: bằng không khí và bằng chất lỏng.", a: "Đ" },
+                        { t: "Hệ thống đánh lửa có nhiệm vụ tạo tia lửa điện trong động cơ Diesel.", a: "S" }
+                    ]},
+                    { q: "Câu 15. Cấu tạo của ô tô:", sub: [
+                        { t: "Ô tô gồm: động cơ, truyền lực, bánh xe, treo, lái, phanh, khung vỏ, điện.", a: "Đ" },
+                        { t: "Hệ thống truyền lực của ô tô chỉ bao gồm động cơ và hộp số.", a: "S" },
+                        { t: "Khung gầm ô tô không ảnh hưởng đến sự ổn định khi di chuyển.", a: "S" },
+                        { t: "Hệ thống lái gồm: cơ cấu lái, dẫn động lái và trợ lực lái.", a: "Đ" }
+                    ]}
+                ]
+            }
         };
 
         let state = { grade: 0, type: '', list: [], userAns: {}, isReview: false };
@@ -225,7 +280,11 @@
             state.userAns = {};
             
             let data = JSON.parse(JSON.stringify(questionsDB[state.grade][type]));
-            
+            if (data.length === 0) {
+                alert("Hiện tại chưa có câu hỏi cho phần này!");
+                return;
+            }
+
             if(type === 'multiple') {
                 data.forEach(q => {
                     let correctTxt = q.options[q.answer];
@@ -262,7 +321,7 @@
 
                         div.innerHTML += `
                             <div class="flex flex-col md:flex-row md:items-center justify-between p-3 border-b border-white/5 last:border-0 gap-3">
-                                <span class="flex-1 text-sm">${String.fromCharCode(65+sIdx)}. ${s.t}</span>
+                                <span class="flex-1 text-sm">${String.fromCharCode(97+sIdx)}) ${s.t}</span>
                                 <div class="flex gap-2">
                                     <button onclick="pickTF('${subId}', 'Đ')" class="px-4 py-1 rounded border text-xs ${btnD}" ${state.isReview?'disabled':''}>ĐÚNG</button>
                                     <button onclick="pickTF('${subId}', 'S')" class="px-4 py-1 rounded border text-xs ${btnS}" ${state.isReview?'disabled':''}>SAI</button>
@@ -275,8 +334,8 @@
                             ${q.options.map((opt, i) => {
                                 let cls = "border-white/10";
                                 if(state.isReview) {
-                                    if(i === q.answer) cls = "opt-correct bg-emerald-600 border-emerald-500";
-                                    else if(state.userAns[idx] === i) cls = "opt-wrong bg-red-600 border-red-500";
+                                    if(i === q.answer) cls = "bg-emerald-600 border-emerald-500 text-white";
+                                    else if(state.userAns[idx] === i) cls = "bg-red-600 border-red-500 text-white";
                                 } else if(state.userAns[idx] === i) cls = "selected-mc";
                                 return `<button onclick="pickMC(${idx}, ${i})" class="p-4 border rounded-xl text-left text-sm transition-all ${cls}" ${state.isReview?'disabled':''}>
                                     <span class="font-bold mr-2">${String.fromCharCode(65+i)}.</span> ${opt}
@@ -309,7 +368,7 @@
         function showReview() {
             state.isReview = true;
             goScreen(3);
-            document.getElementById('submit-btn').innerText = "Về màn hình điểm";
+            document.getElementById('submit-btn').innerText = "Về kết quả";
             document.getElementById('submit-btn').onclick = () => goScreen(4);
             render();
             window.scrollTo(0,0);
