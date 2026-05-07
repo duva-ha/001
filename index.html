@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>TECH_EXAM v1.8 - Update Grade 11</title>
+    <title>TECH_EXAM v1.8 - Công Nghệ 11</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
     <style>
@@ -30,7 +30,6 @@
     </div>
 
     <div class="max-w-4xl mx-auto">
-        <!-- SCREEN 1: GRADE -->
         <div id="screen-1" class="text-center py-12">
             <h2 class="text-3xl font-bold mb-10">Chọn Khối Lớp</h2>
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-md mx-auto">
@@ -39,7 +38,6 @@
             </div>
         </div>
 
-        <!-- SCREEN 2: TYPE -->
         <div id="screen-2" class="hidden text-center py-12">
             <h2 id="screen-2-title" class="text-3xl font-bold mb-10 text-sky-400">CHỌN HÌNH THỨC</h2>
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-2xl mx-auto">
@@ -49,7 +47,6 @@
             <button onclick="goScreen(1)" class="mt-8 text-slate-500 hover:text-white">← Quay lại chọn khối</button>
         </div>
 
-        <!-- SCREEN 3: QUIZ -->
         <div id="screen-3" class="hidden">
             <div id="quiz-container" class="space-y-8 mb-32"></div>
             <div class="fixed bottom-0 left-0 w-full glass p-4 flex justify-center border-t border-sky-500/30 z-50">
@@ -57,7 +54,6 @@
             </div>
         </div>
 
-        <!-- SCREEN 4: RESULT -->
         <div id="screen-4" class="hidden text-center py-12">
             <h2 class="font-tech text-4xl text-sky-400 mb-6">KẾT QUẢ</h2>
             <div class="glass p-10 rounded-3xl inline-block mb-8">
@@ -91,7 +87,7 @@
                     { question: "Lệnh 'Line' trong AutoCAD dùng để vẽ gì?", options: ["Đường tròn", "Đoạn thẳng", "Hình chữ nhật", "Cung tròn"], answer: 1 },
                     { question: "Thiết kế kĩ thuật là gì?", options: ["Quá trình sản xuất sản phẩm", "Hoạt động sáng tạo giải quyết vấn đề bằng công nghệ", "Việc mua bán sản phẩm", "Việc sửa chữa máy móc"], answer: 1 },
                     { question: "Bước đầu tiên của quy trình thiết kế kĩ thuật là gì?", options: ["Xây dựng nguyên mẫu", "Xác định vấn đề", "Tìm hiểu tổng quan", "Xác định yêu cầu"], answer: 1 },
-                    { question: "Y yếu tố nhân trắc học trong thiết kế là gì?", options: ["Giá thành sản phẩm", "Sự phù hợp với cơ thể con người", "Màu sắc sản phẩm", "Độ bền vật liệu"], answer: 1 },
+                    { question: "Yếu tố nhân trắc học trong thiết kế là gì?", options: ["Giá thành sản phẩm", "Sự phù hợp với cơ thể con người", "Màu sắc sản phẩm", "Độ bền vật liệu"], answer: 1 },
                     { question: "Vòng đời sản phẩm kết thúc ở giai đoạn nào?", options: ["Sử dụng", "Bảo trì", "Thải loại/Tái chế", "Sản xuất"], answer: 2 },
                     { question: "Hồ sơ kĩ thuật bao gồm gì?", options: ["Chỉ có bản vẽ", "Chỉ có thuyết minh", "Bản vẽ, thuyết minh và các tài liệu liên quan", "Mẫu thử sản phẩm"], answer: 2 },
                     { question: "Nguyên tắc đơn giản hóa trong thiết kế giúp gì?", options: ["Tăng tính thẩm mỹ cực cao", "Dễ sản xuất và sửa chữa", "Tăng giá thành", "Sử dụng nhiều chi tiết phức tạp"], answer: 1 },
@@ -106,161 +102,47 @@
                     { question: "Đường tâm vẽ bằng nét gì?", options: ["Liền đậm", "Gạch chấm mảnh", "Nét đứt", "Nét uốn lượn"], answer: 1 },
                     { question: "Bản vẽ lắp KHÔNG có nội dung nào sau đây?", options: ["Khung tên", "Bảng kê", "Yêu cầu kĩ thuật", "Kích thước từng chi tiết nhỏ"], answer: 3 }
                 ],
-                tf: [
-                    { q: "Đánh giá đúng/sai về quy ước vẽ ren nhìn thấy:", sub: [
-                        { t: "Đường đỉnh ren và đường giới hạn ren được vẽ bằng nét liền đậm.", a: "Đ" },
-                        { t: "Đường chân ren được vẽ bằng nét đứt mảnh.", a: "S" },
-                        { t: "Vòng đỉnh ren được vẽ đóng kín bằng nét liền đậm.", a: "S" },
-                        { t: "Vòng chân ren được vẽ hở khoảng 1/4 vòng bằng nét liền mảnh.", a: "Đ" }
-                    ]},
-                    { q: "Nhận định về nội dung của các loại bản vẽ kỹ thuật:", sub: [
-                        { t: "Bản vẽ chi tiết là tài liệu dùng trong chế tạo và kiểm tra chi tiết.", a: "Đ" },
-                        { t: "Bản vẽ lắp có thêm bảng kê để quản lý danh mục các chi tiết cấu thành.", a: "Đ" },
-                        { t: "Bản vẽ nhà chỉ bao gồm các hình chiếu đứng và hình chiếu cạnh.", a: "S" },
-                        { t: "Khung tên là nội dung bắt buộc phải có trên mọi loại bản vẽ kỹ thuật.", a: "Đ" }
-                    ]},
-                    { q: "Đánh giá về vai trò của hoạt động thiết kế kỹ thuật:", sub: [
-                        { t: "Thiết kế kỹ thuật giúp phát triển các sản phẩm mới nhằm đáp ứng nhu cầu của con người.", a: "Đ" },
-                        { t: "Thiết kế kỹ thuật chỉ tập trung vào việc làm cho sản phẩm đẹp hơn (tính thẩm mỹ).", a: "S" },
-                        { t: "Hoạt động thiết kế góp phần thúc đẩy sự phát triển của công nghệ.", a: "Đ" },
-                        { t: "Thiết kế kỹ thuật giúp tối ưu hóa việc sử dụng tài nguyên và chi phí sản xuất.", a: "Đ" }
-                    ]},
-                    { q: "Về các yếu tố ảnh hưởng đến thiết kế kỹ thuật:", sub: [
-                        { t: "Yếu tố nhân trắc học nghiên cứu sự phù hợp giữa kích thước sản phẩm và cơ thể con người.", a: "Đ" },
-                        { t: "Tính thẩm mỹ không quan trọng bằng tính năng kỹ thuật của sản phẩm.", a: "S" },
-                        { t: "Tài chính là yếu tố quyết định đến việc lựa chọn vật liệu và công nghệ sản xuất.", a: "Đ" },
-                        { t: "An toàn là yếu tố tiên quyết, không thể bỏ qua trong mọi thiết kế.", a: "Đ" }
-                    ]},
-                    { q: "Nhận định về quy trình thiết kế kỹ thuật:", sub: [
-                        { t: "Bước đầu tiên của quy trình là xây dựng nguyên mẫu cho giải pháp.", a: "S" },
-                        { t: "Lập hồ sơ kỹ thuật là bước cuối cùng sau khi giải pháp đã được kiểm chứng đạt yêu cầu.", a: "Đ" },
-                        { t: "Nếu kết quả kiểm chứng không đạt, ta phải quay lại bước xác định yêu cầu hoặc đề xuất giải pháp.", a: "Đ" },
-                        { t: "Tìm hiểu tổng quan giúp người thiết kế tránh lặp lại những sai lầm của các sản phẩm tương tự đã có.", a: "Đ" }
-                    ]},
-                    { q: "Đánh giá về nguyên tắc thiết kế kỹ thuật:", sub: [
-                        { t: "Nguyên tắc tối ưu hóa giúp tìm ra giải pháp tốt nhất trong các điều kiện ràng buộc.", a: "Đ" },
-                        { t: "Nguyên tắc phát triển bền vững yêu cầu ưu tiên sử dụng vật liệu không thể tái chế.", a: "S" },
-                        { t: "Nguyên tắc đơn giản hóa giúp giảm chi phí sản xuất và dễ dàng bảo trì.", a: "Đ" },
-                        { t: "Thiết kế phải luôn tuân thủ các tiêu chuẩn kỹ thuật (quốc gia hoặc quốc tế).", a: "Đ" }
-                    ]},
-                    { q: "Về phần mềm AutoCAD trong thiết kế kỹ thuật:", sub: [
-                        { t: "Lệnh Line (L) dùng để vẽ các đoạn thẳng nối tiếp nhau.", a: "Đ" },
-                        { t: "Lệnh Circle (C) chỉ có thể vẽ hình tròn khi biết tâm và bán kính.", a: "S" },
-                        { t: "Lệnh Erase (E) dùng để xóa các đối tượng không cần thiết trên bản vẽ.", a: "Đ" },
-                        { t: "AutoCAD giúp nâng cao năng suất và độ chính xác so với vẽ thủ công trên giấy.", a: "Đ" }
-                    ]},
-                    { q: "Nhận định về bản vẽ nhà và kiến trúc:", sub: [
-                        { t: "Mặt bằng là hình biểu diễn quan trọng nhất của bản vẽ nhà.", a: "Đ" },
-                        { t: "Mặt đứng thể hiện kết cấu bên trong và chiều cao các tầng của ngôi nhà.", a: "S" },
-                        { t: "Mặt cắt thể hiện các bộ phận bị khuất và cấu tạo theo chiều dọc của ngôi nhà.", a: "Đ" },
-                        { t: "Các ký hiệu trên bản vẽ nhà (như cửa đơn, cửa kép) phải tuân theo tiêu chuẩn.", a: "Đ" }
-                    ]},
-                    { q: "Đánh giá về nghề nghiệp trong lĩnh vực thiết kế:", sub: [
-                        { t: "Kỹ sư xây dựng chỉ làm việc tại công trường, không tham gia vào quá trình thiết kế.", a: "S" },
-                        { t: "Nhà thiết kế công nghiệp tập trung vào hình dáng và trải nghiệm người dùng của sản phẩm tiêu dùng.", a: "Đ" },
-                        { t: "Kiến trúc sư là người chịu trách nhiệm chính về thẩm mỹ và công năng của các tòa nhà.", a: "Đ" },
-                        { t: "Kỹ sư cơ khí tham gia thiết kế các máy móc và hệ thống cơ khí phức tạp.", a: "Đ" }
-                    ]},
-                    { q: "Về việc sử dụng vật liệu và công nghệ trong thiết kế:", sub: [
-                        { t: "Việc ứng dụng công nghệ in 3D giúp rút ngắn thời gian xây dựng nguyên mẫu.", a: "Đ" },
-                        { t: "Vật liệu thông minh có khả năng thay đổi tính chất theo môi trường đang là xu hướng thiết kế mới.", a: "Đ" },
-                        { t: "Thiết kế kỹ thuật hiện đại không cần quan tâm đến vấn đề rác thải sau khi sản phẩm hết vòng đời.", a: "S" },
-                        { t: "Sử dụng phần mềm mô phỏng giúp dự đoán các hư hỏng trước khi sản xuất thực tế.", a: "Đ" }
-                    ]}
-                ]
+                tf: []
             },
             11: {
-                multiple: [],
+                multiple: [
+                    { question: "Cơ cấu trục khuỷu thanh truyền bao gồm các chi tiết chính nào?", options: ["Pít tông, trục cam, trục khuỷu, bánh đà", "Pít tông, thanh truyền, xupap, bánh đà", "Pít tông, thanh truyền, trục khuỷu, bánh đà", "Trục cam, con đội, đũa đẩy, cần mở"], answer: 2 },
+                    { question: "Chi tiết nào trực tiếp nhận áp lực của khí cháy để truyền lực cho trục khuỷu?", options: ["Pít tông", "Thanh truyền", "Xupap", "Bánh đà"], answer: 0 },
+                    { question: "Cấu tạo của pít tông gồm những phần nào?", options: ["Đỉnh, đầu, chốt pít tông", "Đỉnh, đầu, thân", "Xéc măng khí, xéc măng dầu, thân", "Đỉnh, xéc măng, lỗ gài chốt"], answer: 1 },
+                    { question: "Nhiệm vụ của xéc măng dầu là gì?", options: ["Bao kín buồng cháy không cho khí lọt xuống các te", "Ngăn dầu bôi trơn từ các te sục lên buồng cháy", "Dẫn hướng cho pít tông chuyển động trong xi lanh", "Truyền lực từ pít tông cho thanh truyền"], answer: 1 },
+                    { question: "Đầu to của thanh truyền được lắp với chi tiết nào?", options: ["Chốt pít tông", "Cổ khuỷu", "Chốt khuỷu", "Bánh đà"], answer: 2 },
+                    { question: "Trục quay của trục khuỷu được gọi là gì?", options: ["Chốt khuỷu", "Cổ khuỷu", "Má khuỷu", "Đối trọng"], answer: 1 },
+                    { question: "Chi tiết nào có vai trò giúp trục khuỷu quay đều nhờ khả năng lưu trữ động năng?", options: ["Thanh truyền", "Pít tông", "Bánh đà", "Trục cam"], answer: 2 },
+                    { question: "Nhiệm vụ của cơ cấu phối khí là gì?", options: ["Đóng, mở các cửa nạp và cửa thải đúng thời điểm", "Biến chuyển động tịnh tiến thành chuyển động quay", "Đưa dầu bôi trơn đến các bề mặt ma sát", "Giữ cho nhiệt độ các chi tiết không vượt quá giới hạn"], answer: 0 },
+                    { question: "Ở động cơ 4 kỳ, số vòng quay của trục cam bằng bao nhiêu so với số vòng quay của trục khuỷu?", options: ["Bằng nhau", "Gấp 2 lần", "Bằng 1/2 lần", "Gấp 4 lần"], answer: 2 },
+                    { question: "Buồng cháy của động cơ được tạo thành bởi các chi tiết nào?", options: ["Thân máy, xi lanh và pít tông", "Nắp máy, xi lanh và đỉnh pít tông", "Xi lanh, trục khuỷu và thanh truyền", "Pít tông, thanh truyền và trục khuỷu"], answer: 1 },
+                    { question: "Vai trò của ô tô trong sản xuất là gì?", options: ["Chở nhiều người và hàng hóa đi trên nhiều địa hình", "Phục vụ các công việc đặc thù như cứu thương", "Vận chuyển hàng hóa và nguyên vật liệu sản xuất", "Vận chuyển người đi du lịch"], answer: 2 },
+                    { question: "Sơ đồ hệ thống cơ khí động lực đúng là?", options: ["Nguồn động lực → Máy công tác → Hệ thống truyền động", "Nguồn động lực → Hệ thống truyền động → Máy công tác", "Máy công tác → Hệ thống truyền động → Nguồn động lực", "Hệ thống truyền động → Nguồn động lực → Máy công tác"], answer: 1 },
+                    { question: "Nghề nghiệp xây dựng bản vẽ, tính toán, mô phỏng thiết kế máy móc động lực là?", options: ["Thiết kế kĩ thuật cơ khí động lực", "Lắp ráp máy, thiết bị cơ khí động lực", "Chế tạo máy thiết bị cơ khí động lực", "Bảo dưỡng, sửa chữa máy, thiết bị cơ khí động lực"], answer: 0 },
+                    { question: "Vai trò của nguồn động lực trong hệ thống cơ khí động lực là?", options: ["Đảm bảo hệ thống làm việc ở môi trường khác nhau", "Truyền và biến đổi năng lượng", "Biến đổi năng lượng từ nguồn đến máy công tác", "Cung cấp năng lượng cho hệ thống hoạt động"], answer: 3 },
+                    { question: "Sử dụng và bảo dưỡng hệ thống truyền lực cần lưu ý gì?", options: ["Chỉ kiểm tra khi có thiết bị hỏng hóc", "Các bộ phận cần được kiểm tra bảo dưỡng định kì", "Khi chuyển số không cần mở li hợp", "Xe tự động không cần kéo thắng tay khi dừng"], answer: 1 },
+                    { question: "Bộ phận nào là 'nguồn động lực' tạo ra mô men chủ động cho ô tô?", options: ["Hệ thống truyền lực", "Động cơ", "Bánh xe", "Hệ thống lái"], answer: 1 },
+                    { question: "Hệ thống truyền lực trên ô tô bao gồm các cụm chính nào?", options: ["Động cơ, li hợp, hộp số", "Bánh xe, hệ thống treo, hệ thống lái", "Li hợp, hộp số, các đăng, truyền lực chính và vi sai", "Xi lanh chính, xi lanh công tác, cơ cấu phanh"], answer: 2 },
+                    { question: "Chức năng chính của hệ thống treo trên ô tô là gì?", options: ["Điều khiển hướng chuyển động", "Truyền và biến đổi mô men", "Giảm va đập từ mặt đường, giúp xe êm dịu", "Giảm tốc độ hoặc dừng hẳn xe"], answer: 2 },
+                    { question: "Hệ thống điều khiển hướng chuyển động hoặc giữ xe thẳng ổn định?", options: ["Hệ thống phanh", "Hệ thống truyền lực", "Hệ thống lái", "Khung vỏ xe"], answer: 2 },
+                    { question: "Tác động tiêu cực của ô tô đối với xã hội và môi trường là?", options: ["Giúp cơ giới hóa sản xuất", "Là phương tiện giao thông chủ yếu", "Gây ô nhiễm môi trường và tai nạn giao thông", "Hỗ trợ đắc lực cứu hộ cứu nạn"], answer: 2 },
+                    { question: "Cơ cấu trục khuỷu thanh truyền bao gồm bộ phận nào?", options: ["Pít tông, thanh truyền, trục khuỷu, bánh đà", "Pít tông, thanh truyền, trục khuỷu, bánh đà, xu páp", "Pít tông, thanh truyền, trục khuỷu", "Pít tông, thanh truyền, trục khuỷu, thân máy"], answer: 0 },
+                    { question: "Hệ thống phanh trên ô tô có chức năng chính là?", options: ["Giảm tốc độ và dừng xe khi cần thiết", "Giúp xe chuyển hướng khi quay vô lăng", "Cung cấp năng lượng cho hệ thống điện", "Làm động cơ hoạt động ổn định"], answer: 0 },
+                    { question: "Bộ phận nối ngắt dòng truyền mômen từ động cơ đến bánh xe chủ động?", options: ["Hộp số", "Truyền lực các đăng", "Truyền lực chính và vi sai", "Li hợp"], answer: 3 },
+                    { question: "Theo nhiên liệu sử dụng, động cơ đốt trong được phân loại thành?", options: ["Làm mát bằng nước và không khí", "Động cơ 2 kì và 4 kì", "Động cơ xăng, Diesel, và gas", "Động cơ 1 xi lanh và nhiều xi lanh"], answer: 2 },
+                    { question: "Nếu hệ thống treo bị hỏng, điều gì dễ xảy ra nhất trên đường gồ ghề?", options: ["Xe bị rung lắc mạnh khó kiểm soát", "Xe đi nhanh hơn", "Hệ thống điện ngừng hoạt động", "Xe tiêu thụ nhiều nhiên liệu hơn"], answer: 0 },
+                    { question: "Trong hệ thống bôi trơn, nếu bầu lọc bị tắc hoàn toàn, hệ thống xử lý thế nào?", options: ["Dầu mở van an toàn chảy ngược lại các-te", "Dầu đi qua van khống chế lưu lượng qua két làm mát", "Van an toàn mở cho dầu đi thẳng vào đường dầu chính", "Hệ thống ngắt dòng truyền mô men động cơ"], answer: 2 },
+                    { question: "So sánh xử lí khí NOx giữa động cơ xăng và Diesel?", options: ["Cả hai dùng bộ xử lí ba thành phần khử NOx", "Xăng dùng bộ lọc hạt, Diesel dùng bộ xúc tác", "Xăng dùng bộ xúc tác khử, Diesel dùng hệ thống EGR", "Diesel oxy hóa thành CO2, xăng dùng tia lửa điện"], answer: 2 },
+                    { question: "Nhiệm vụ của hệ thống bôi trơn là gì?", options: ["Cung cấp hòa khí sạch vào xi lanh", "Đưa dầu đến bề mặt làm việc để giảm ma sát", "Làm quay trục khuỷu để khởi động", "Đốt cháy nhiên liệu Diesel"], answer: 1 },
+                    { question: "Hệ thống làm mát có nhiệm vụ chính là?", options: ["Giảm tiếng ồn khi vận hành", "Cung cấp dầu bôi trơn", "Giữ nhiệt độ chi tiết không vượt giới hạn cho phép", "Lọc sạch bụi bẩn trong không khí"], answer: 2 },
+                    { question: "Hệ thống chỉ có nhiệm vụ làm quay trục khuỷu đến tốc độ để tự nổ máy?", options: ["Hệ thống đánh lửa", "Hệ thống khởi động", "Hệ thống nhiên liệu", "Hệ thống bôi trơn"], answer: 1 }
+                ],
                 tf: [
-                    { q: "Câu 1. Nhận định về cấu tạo và nguyên lý của động cơ đốt trong:", sub: [
-                        { t: "Điểm chết là vị trí mà tại đó piston đổi chiều chuyển động.", a: "Đ" },
-                        { t: "Ở động cơ 4 kỳ, trục khuỷu quay 1 vòng (360°) để thực hiện hết một chu trình làm việc.", a: "S" },
-                        { t: "Thể tích công tác là thể tích xi lanh khi piston ở điểm chết dưới.", a: "S" },
-                        { t: "Buồng cháy là thể tích không gian giới hạn bởi nắp máy, xi lanh và đỉnh piston khi piston ở điểm chết trên.", a: "Đ" }
-                    ]},
-                    { q: "Câu 2. Về thân máy và nắp máy:", sub: [
-                        { t: "Thân máy và nắp máy là 'khung xương' để lắp đặt tất cả các cơ cấu và hệ thống của động cơ.", a: "Đ" },
-                        { t: "Nắp máy của động cơ làm mát bằng nước không có áo nước làm mát.", a: "S" },
-                        { t: "Cánh tản nhiệt được đúc trên thân máy và nắp máy của động cơ làm mát bằng không khí.", a: "Đ" },
-                        { t: "Thân xi lanh có thể được đúc rời (gọi là lót xi lanh) để dễ dàng thay thế khi bị mòn.", a: "Đ" }
-                    ]},
-                    { q: "Câu 3. Đánh giá về cơ cấu trục khuỷu thanh truyền:", sub: [
-                        { t: "Piston có nhiệm vụ nhận lực giãn nở của khí cháy rồi truyền lực cho trục khuỷu để sinh công.", a: "Đ" },
-                        { t: "Thanh truyền là chi tiết trung gian nối giữa piston và trục khuỷu.", a: "Đ" },
-                        { t: "Trục khuỷu nhận lực từ thanh truyền để tạo ra mô men quay kéo máy công tác.", a: "Đ" },
-                        { t: "Chốt piston dùng để nối đầu to thanh truyền với piston.", a: "S" }
-                    ]},
-                    { q: "Câu 4. Về cơ cấu phối khí:", sub: [
-                        { t: "Cơ cấu phối khí có nhiệm vụ đóng, mở các cửa nạp, cửa thải đúng lúc.", a: "Đ" },
-                        { t: "Ở cơ cấu phối khí dùng xupap treo, xupap được lắp ở thân máy.", a: "S" },
-                        { t: "Trục cam nhận chuyển động quay từ trục khuỷu thông qua đai hoặc xích cam.", a: "Đ" },
-                        { t: "Số vòng quay của trục cam bằng một nửa số vòng quay của trục khuỷu ở động cơ 4 kỳ.", a: "Đ" }
-                    ]},
-                    { q: "Câu 5. Nhận định về hệ thống bôi trơn:", sub: [
-                        { t: "Hệ thống bôi trơn giúp giảm ma sát và mài mòn giữa các bề mặt chi tiết chuyển động.", a: "Đ" },
-                        { t: "Trong hệ thống bôi trơn cưỡng bức, dầu được đẩy đến các bề mặt ma sát nhờ áp suất của bơm dầu.", a: "Đ" },
-                        { t: "Dầu bôi trơn chỉ có tác dụng làm trơn mà không có tác dụng làm mát hay tẩy rửa chi tiết.", a: "S" },
-                        { t: "Bầu lọc dầu có nhiệm vụ giữ lại các tạp chất cơ học lẫn trong dầu bôi trơn.", a: "Đ" }
-                    ]},
-                    { q: "Câu 6. Đánh giá về hệ thống làm mát:", sub: [
-                        { t: "Hệ thống làm mát bằng nước loại tuần hoàn cưỡng bức sử dụng bơm nước để tạo sự lưu thông.", a: "Đ" },
-                        { t: "Van hằng nhiệt giúp điều chỉnh nhiệt độ nước làm mát bằng cách khống chế lượng nước đi qua két nước.", a: "Đ" },
-                        { t: "Khi nhiệt độ nước còn thấp, van hằng nhiệt sẽ mở cho nước chảy hoàn toàn về két nước để làm nguội.", a: "S" },
-                        { t: "Quạt gió trong hệ thống làm mát có tác dụng tăng tốc độ lưu thông của không khí qua két nước.", a: "Đ" }
-                    ]},
-                    { q: "Câu 7. Về hệ thống cung cấp nhiên liệu và không khí trong động cơ xăng:", sub: [
-                        { t: "Hệ thống phun xăng điện tử (EFI) sử dụng các cảm biến để điều khiển lượng xăng phun vào xi lanh tối ưu.", a: "Đ" },
-                        { t: "Bộ chế hòa khí có nhiệm vụ trộn xăng với không khí theo tỉ lệ nhất định trước khi đưa vào xi lanh.", a: "Đ" },
-                        { t: "Ở hệ thống phun xăng, xăng được phun trực tiếp vào đường ống nạp hoặc vào buồng cháy.", a: "Đ" },
-                        { t: "Bầu lọc khí có tác dụng loại bỏ bụi bẩn trong không khí trước khi đưa vào xi lanh.", a: "Đ" }
-                    ]},
-                    { q: "Câu 8. Về hệ thống cung cấp nhiên liệu trong động cơ Diesel:", sub: [
-                        { t: "Nhiên liệu Diesel được phun vào xi lanh ở cuối kỳ nạp dưới áp suất cao.", a: "S" },
-                        { t: "Bơm cao áp có nhiệm vụ cung cấp nhiên liệu với áp suất cao, đúng thời điểm cho vòi phun.", a: "Đ" },
-                        { t: "Vòi phun có nhiệm vụ phun tơi nhiên liệu vào buồng cháy để quá trình cháy tốt nhất.", a: "Đ" },
-                        { t: "Động cơ Diesel tự bốc cháy nhờ nén khí ở áp suất cao mà không cần bugi.", a: "Đ" }
-                    ]},
-                    { q: "Câu 9. Đánh giá về hệ thống đánh lửa:", sub: [
-                        { t: "Hệ thống đánh lửa chỉ có trên động cơ xăng, không có trên động cơ Diesel.", a: "Đ" },
-                        { t: "Nhiệm vụ của hệ thống đánh lửa là tạo ra tia lửa điện cao áp để châm cháy hòa khí đúng lúc.", a: "Đ" },
-                        { t: "Bugi là chi tiết trực tiếp tạo ra tia lửa điện bên trong buồng cháy.", a: "Đ" },
-                        { t: "Cuộn sơ cấp của biến áp đánh lửa có số vòng dây nhiều hơn cuộn thứ cấp.", a: "S" }
-                    ]},
-                    { q: "Câu 10. Về hệ thống truyền lực trên ô tô:", sub: [
-                        { t: "Hệ thống truyền lực truyền mô men quay từ động cơ đến các bánh xe chủ động.", a: "Đ" },
-                        { t: "Ly hợp dùng để nối hoặc ngắt truyền động từ động cơ đến hộp số một cách đột ngột.", a: "S" },
-                        { t: "Hộp số giúp thay đổi mô men quay, tốc độ và cho phép xe chạy lùi.", a: "Đ" },
-                        { t: "Truyền lực chính và bộ vi sai giúp các bánh xe chủ động quay với tốc độ khác nhau khi vào cua.", a: "Đ" }
-                    ]},
-                    { q: "Câu 11. Nhận định về ứng dụng của động cơ đốt trong:", sub: [
-                        { t: "Động cơ đốt trong là nguồn động lực phổ biến nhất cho ô tô, tàu thủy, máy bay.", a: "Đ" },
-                        { t: "Khi lắp cho máy nông nghiệp, cần có hệ thống truyền lực phù hợp đặc thù công việc.", a: "Đ" },
-                        { t: "Động cơ đốt trong không được sử dụng trong máy phát điện vì tiếng ồn.", a: "S" },
-                        { t: "Hiệu suất của động cơ đốt trong thường cao hơn động cơ điện.", a: "S" }
-                    ]},
-                    { q: "Câu 12. Về bảo dưỡng và sửa chữa động cơ:", sub: [
-                        { t: "Bảo dưỡng định kỳ giúp kéo dài tuổi thọ và đảm bảo an toàn vận hành.", a: "Đ" },
-                        { t: "Thay dầu máy và lọc dầu là công việc cần thực hiện định kỳ theo khuyến cáo.", a: "Đ" },
-                        { t: "Khi động cơ có tiếng gõ lạ, người dùng vẫn có thể tiếp tục vận hành bình thường.", a: "S" },
-                        { t: "Kiểm tra mực nước làm mát là cần thiết để tránh tình trạng động cơ bị quá nhiệt.", a: "Đ" }
-                    ]},
-                    { q: "Câu 13. Về nguyên lý làm việc của ĐCĐT (Học sinh trao đổi):", sub: [
-                        { t: "Động cơ Diesel không cần bugi vì hòa khí tự bốc cháy dưới áp suất và nhiệt độ cao.", a: "Đ" },
-                        { t: "Trong kì nén, piston dịch chuyển từ ĐCT xuống ĐCD.", a: "S" },
-                        { t: "Một chu trình động cơ 4 kỳ gồm: nạp, nén, cháy giãn nở và xả.", a: "Đ" },
-                        { t: "Thể tích buồng cháy Vs = S (Sai công thức).", a: "S" }
-                    ]},
-                    { q: "Câu 14. Vai trò của các hệ thống trong động cơ:", sub: [
-                        { t: "Xe gắn máy thông thường sử dụng hệ thống khởi động bằng khí nén.", a: "S" },
-                        { t: "Hệ thống xử lý khí thải giúp giảm chất độc hại trước khi thải ra môi trường.", a: "Đ" },
-                        { t: "Hệ thống làm mát chia làm hai loại: bằng không khí và bằng chất lỏng.", a: "Đ" },
-                        { t: "Hệ thống đánh lửa có nhiệm vụ tạo tia lửa điện trong động cơ Diesel.", a: "S" }
-                    ]},
-                    { q: "Câu 15. Cấu tạo của ô tô:", sub: [
-                        { t: "Ô tô gồm: động cơ, truyền lực, bánh xe, treo, lái, phanh, khung vỏ, điện.", a: "Đ" },
-                        { t: "Hệ thống truyền lực của ô tô chỉ bao gồm động cơ và hộp số.", a: "S" },
-                        { t: "Khung gầm ô tô không ảnh hưởng đến sự ổn định khi di chuyển.", a: "S" },
-                        { t: "Hệ thống lái gồm: cơ cấu lái, dẫn động lái và trợ lực lái.", a: "Đ" }
+                    { q: "Đánh giá về hệ thống bôi trơn và làm mát:", sub: [
+                        { t: "Dầu bôi trơn chỉ có tác dụng giảm ma sát.", a: "S" },
+                        { t: "Hệ thống làm mát giúp giữ nhiệt độ ổn định cho động cơ.", a: "Đ" },
+                        { t: "Van hằng nhiệt điều khiển nước qua két tản nhiệt.", a: "Đ" },
+                        { t: "Bơm dầu tạo áp suất để đẩy dầu đến các bề mặt ma sát.", a: "Đ" }
                     ]}
                 ]
             }
