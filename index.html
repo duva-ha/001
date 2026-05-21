@@ -3,10 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>TECH_EXAM v3.2 - Hệ Thống Ôn Luyện & Nạp Đề Word</title>
+    <title>TECH_EXAM v3.2 - Phân Quyền Hệ Thống</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
-    <!-- Nhúng thư viện Mammoth.js để đọc file Word -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/mammoth/1.6.0/mammoth.browser.min.js"></script>
     <style>
         :root { --primary: #0ea5e9; --bg: #0f172a; }
@@ -16,344 +15,261 @@
         .btn-tech { transition: all 0.3s; border: 1px solid rgba(14, 165, 233, 0.3); cursor: pointer; }
         .btn-tech:hover:not(:disabled) { background: var(--primary); color: white; box-shadow: 0 0 20px var(--primary); }
         .hidden { display: none; }
-        .active-tf { background: #0ea5e9 !important; color: white !important; border-color: #38bdf8 !important; }
-        .correct-tf { background: #059669 !important; color: white !important; }
-        .wrong-tf { background: #dc2626 !important; color: white !important; }
-        .selected-mc { background: rgba(14, 165, 233, 0.3); border-color: #0ea5e9; color: white; }
+        .active-tf { background: #0ea5e9 !important; color: white !important; }
+        .correct-tf { background: #059669 !important; }
+        .wrong-tf { background: #dc2626 !important; }
+        .selected-mc { background: rgba(14, 165, 233, 0.3); border-color: #0ea5e9; }
         #timer-display.low-time { color: #ef4444; animation: pulse 1s infinite; }
         @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.5; } }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        .animate-fade-in { animation: fadeIn 0.4s ease-out forwards; }
         .section-header { border-left: 4px solid #0ea5e9; padding-left: 1rem; margin: 2rem 0 1.5rem 0; }
     </style>
 </head>
 <body class="p-4 md:p-8 flex flex-col justify-start min-h-screen">
 
     <div id="app-content" class="w-full">
-        <!-- HEADER -->
-        <div class="max-w-4xl mx-auto flex justify-between items-center mb-8">
+        <div class="max-w-4xl mx-auto flex justify-between items-center mb-12">
             <div>
                 <h1 class="font-tech text-2xl text-sky-400 tracking-tighter">TECH_EXAM v3.2</h1>
                 <p id="grade-display" class="text-xs text-slate-500 uppercase tracking-widest font-semibold">Hệ thống ôn tập Công nghệ</p>
             </div>
             <div id="timer-container" class="hidden glass px-6 py-2 rounded-full border border-sky-500/50">
-                <span class="text-xs text-slate-400 uppercase mr-2 font-bold">Thời gian:</span>
                 <span id="timer-display" class="font-tech text-xl text-sky-400">25:00</span>
             </div>
         </div>
 
         <div class="max-w-4xl mx-auto">
-            <!-- SCREEN 1: CHỌN KHỐI LỚP / UPLOAD FILE WORD -->
             <div id="screen-1" class="py-12 space-y-12">
                 <div class="text-center">
-                    <h2 class="text-3xl font-bold mb-10">Chọn Khối Lớp Hệ Thống</h2>
+                    <h2 class="text-3xl font-bold mb-10 uppercase tracking-widest">Bạn là ai?</h2>
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-md mx-auto">
-                        <button onclick="selectGrade(10)" class="btn-tech glass p-8 rounded-2xl text-xl font-bold">KHỐI 10</button>
-                        <button onclick="selectGrade(11)" class="btn-tech glass p-8 rounded-2xl text-xl font-bold">KHỐI 11</button>
+                        <button onclick="checkRole('teacher')" class="btn-tech glass p-8 rounded-2xl text-xl font-bold flex flex-col items-center gap-3">
+                            <span class="text-3xl">👨‍🏫</span> GIÁO VIÊN
+                        </button>
+                        <button onclick="checkRole('student')" class="btn-tech glass p-8 rounded-2xl text-xl font-bold flex flex-col items-center gap-3">
+                            <span class="text-3xl">👨‍🎓</span> HỌC SINH
+                        </button>
                     </div>
                 </div>
 
-                <!-- KHU VỰC NẠP ĐỀ TỪ FILE WORD -->
-                <div class="max-w-md mx-auto p-8 glass rounded-3xl border border-sky-500/20 text-center shadow-xl">
-                    <div class="w-12 h-12 bg-sky-950/50 border border-sky-500/30 rounded-xl flex items-center justify-center mx-auto mb-4">
-                        <svg class="w-6 h-6 text-sky-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"></path>
-                        </svg>
-                    </div>
-                    <p class="text-sm text-slate-300 mb-2 font-semibold uppercase tracking-wider">Nạp Đề Tự Động Từ File Word</p>
-                    <p class="text-xs text-slate-500 mb-6">Chấp nhận định dạng file .docx theo cấu trúc câu hỏi chuẩn</p>
-                    
+                <div id="password-form" class="hidden max-w-xs mx-auto p-6 glass rounded-2xl border border-sky-500/30 animate-fade-in text-center">
+                    <p class="text-sm text-sky-400 mb-4 font-bold uppercase">Xác thực Giáo viên</p>
+                    <input type="password" id="gv-pass" placeholder="Nhập mã GVS..." class="w-full bg-slate-900 border border-slate-700 rounded-lg px-4 py-2 mb-4 text-white focus:outline-none focus:border-sky-500">
+                    <button onclick="verifyPassword()" class="w-full bg-sky-600 hover:bg-sky-500 text-white font-bold py-2 rounded-lg transition-all">XÁC NHẬN</button>
+                </div>
+
+                <div id="teacher-section" class="hidden max-w-md mx-auto p-8 glass rounded-3xl border border-emerald-500/30 text-center shadow-xl animate-fade-in">
+                    <p class="text-sm text-emerald-400 mb-2 font-bold uppercase italic">Quyền truy cập: GIÁO VIÊN ✅</p>
+                    <p class="text-xs text-slate-500 mb-6">Tải lên file câu hỏi để tạo đề thi mới</p>
                     <input type="file" id="word-upload" accept=".docx" class="hidden" onchange="handleWordUpload(event)">
-                    <label for="word-upload" class="bg-sky-600 hover:bg-sky-500 text-white px-8 py-3 rounded-xl font-bold uppercase text-xs tracking-widest cursor-pointer inline-block transition-all shadow-lg shadow-sky-950/50">
-                        Chọn file .docx
+                    <label for="word-upload" class="bg-emerald-600 hover:bg-emerald-500 text-white px-8 py-3 rounded-xl font-bold uppercase text-xs tracking-widest cursor-pointer inline-block transition-all shadow-lg shadow-emerald-950/50">
+                        CHỌN FILE .DOCX
                     </label>
-                    <div id="upload-status" class="text-xs text-emerald-400 mt-4 font-mono hidden bg-emerald-950/30 py-2 px-4 rounded-lg inline-block"></div>
+                    <div id="upload-status" class="text-xs text-emerald-400 mt-4 font-mono hidden bg-emerald-950/30 py-2 px-4 rounded-lg"></div>
+                </div>
+
+                <div id="student-section" class="hidden max-w-2xl mx-auto p-8 glass rounded-3xl border border-sky-500/20 text-center animate-fade-in">
+                    <p class="text-sm text-slate-300 mb-6 font-semibold uppercase tracking-widest">Danh sách bài ôn luyện</p>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <button onclick="selectGrade(10)" class="btn-tech glass py-4 rounded-xl font-bold">ÔN TẬP KHỐI 10</button>
+                        <button onclick="selectGrade(11)" class="btn-tech glass py-4 rounded-xl font-bold">ÔN TẬP KHỐI 11</button>
+                    </div>
                 </div>
             </div>
 
-            <!-- SCREEN 2: CHỌN HÌNH THỨC THI -->
             <div id="screen-2" class="hidden text-center py-12">
                 <h2 id="screen-2-title" class="text-3xl font-bold mb-10 text-sky-400 uppercase">CHỌN HÌNH THỨC</h2>
                 <div id="type-options" class="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-2xl mx-auto"></div>
                 <button onclick="goScreen(1)" class="mt-8 text-slate-500 hover:text-white transition-colors">← Quay lại</button>
             </div>
 
-            <!-- SCREEN 3: MÀN HÌNH LÀM BÀI -->
             <div id="screen-3" class="hidden">
                 <div id="quiz-container" class="space-y-8 mb-32"></div>
                 <div class="fixed bottom-0 left-0 w-full glass p-4 flex justify-center border-t border-sky-500/30 z-50">
-                    <button id="submit-btn" onclick="confirmSubmit()" class="bg-sky-600 hover:bg-sky-500 text-white px-12 py-3 rounded-xl font-bold uppercase tracking-widest transition-all">Nộp Bài</button>
+                    <button onclick="confirmSubmit()" class="bg-sky-600 hover:bg-sky-500 text-white px-12 py-3 rounded-xl font-bold uppercase tracking-widest">Nộp Bài</button>
                 </div>
             </div>
 
-            <!-- SCREEN 4: KẾT QUẢ -->
             <div id="screen-4" class="hidden text-center py-12">
-                <h2 class="font-tech text-4xl text-sky-400 mb-6 uppercase tracking-tighter">Kết quả bài làm</h2>
+                <h2 class="font-tech text-4xl text-sky-400 mb-6 tracking-tighter">KẾT QUẢ</h2>
                 <div class="glass p-10 rounded-3xl inline-block mb-8 min-w-[240px]">
                     <p id="score-text" class="text-7xl font-bold text-white">0.00</p>
-                    <p id="max-score-label" class="text-slate-400 mt-2 font-semibold tracking-widest uppercase text-xs">Điểm số (Tối đa 10.0)</p>
-                    <p id="detail-text" class="text-sm text-sky-400 mt-4 font-mono bg-sky-950/30 py-2 px-4 rounded-lg">Đúng 0 câu/ý</p>
+                    <p id="max-score-label" class="text-slate-400 mt-2 font-semibold tracking-widest uppercase text-xs">Điểm số</p>
                 </div>
                 <div class="flex flex-col items-center gap-4">
-                    <button onclick="showReview()" class="bg-emerald-600 hover:bg-emerald-500 px-10 py-3 rounded-full font-bold w-64 transition-all">XEM LẠI ĐÁP ÁN</button>
-                    <button onclick="location.reload()" class="btn-tech glass px-10 py-3 rounded-full font-bold w-64 transition-all">LÀM ĐỀ KHÁC</button>
+                    <button onclick="showReview()" class="bg-emerald-600 hover:bg-emerald-500 px-10 py-3 rounded-full font-bold w-64">XEM LẠI ĐÁP ÁN</button>
+                    <button onclick="location.reload()" class="btn-tech glass px-10 py-3 rounded-full font-bold w-64">QUAY LẠI TRANG CHỦ</button>
                 </div>
             </div>
         </div>
     </div>
 
     <script>
-        // DỮ LIỆU CỐ ĐỊNH MẶC ĐỊNH CỦA HỆ THỐNG
+        // DỮ LIỆU CÂU HỎI MẶC ĐỊNH
         const commonMultiple = [
-            { question: "Vẽ kĩ thuật có vai trò gì trong đời sống?", options: ["Sử dụng sản phẩm hiệu quả và an toàn", "Để chế tạo sản phẩm", "Để lắp ráp sản phẩm", "Để kiểm tra sản phẩm"], answer: 0 },
             { question: "Mặt phẳng nằm ngang gọi là gì?", options: ["Mặt phẳng chiếu đứng", "Mặt phẳng chiếu bằng", "Mặt phẳng chiếu cạnh", "Mặt phẳng chiếu nghiêng"], answer: 1 },
-            { question: "Hướng chiếu từ trên xuống dưới sẽ thu được hình chiếu nào?", options: ["Hình chiếu đứng", "Hình chiếu bằng", "Hình chiếu cạnh", "Hình chiếu từ phía sau"], answer: 1 },
-            { question: "Tỉ lệ 1:2 là loại tỉ lệ nào?", options: ["Tỉ lệ phóng to", "Tỉ lệ thu nhỏ", "Tỉ lệ nguyên hình", "Tỉ lệ bất kì"], answer: 1 },
-            { question: "Nét liền đậm thường được dùng để vẽ đường nào?", options: ["Đường gióng", "Đường tâm", "Đường bao thấy", "Đường bao khuất"], answer: 2 }
+            { question: "Tỉ lệ 1:2 là loại tỉ lệ nào?", options: ["Tỉ lệ phóng to", "Tỉ lệ thu nhỏ", "Tỉ lệ nguyên hình", "Tỉ lệ bất kì"], answer: 1 }
         ];
-
         const commonTF = [
-            { q: "Trong quy trình thiết kế kĩ thuật, hãy xác định tính Đúng hoặc Sai:", sub: [{ t: "Quy trình thiết kế kĩ thuật là tiến trình tuyến tính một chiều.", a: "S" }, { t: "Bước 'Xây dựng nguyên mẫu' thực hiện sau khi lựa chọn giải pháp tối ưu.", a: "Đ" }, { t: "Tìm hiểu tổng quan giúp tránh sai lầm đã có.", a: "Đ" }, { t: "Hồ sơ kĩ thuật chỉ bao gồm bản vẽ chi tiết.", a: "S" }] }
+            { q: "Nguyên tắc bền vững trong thiết kế:", sub: [{ t: "Sử dụng tài nguyên tối đa để phát triển nhanh.", a: "S" }, { t: "Quy tắc 6R là cốt lõi bảo vệ môi trường.", a: "Đ" }] }
         ];
 
-        let questionsDB = {
-            10: { multiple: commonMultiple, tf: commonTF },
-            11: { multiple: commonMultiple, tf: commonTF }
-        };
+        let questionsDB = { 10: { multiple: commonMultiple, tf: commonTF }, 11: { multiple: commonMultiple, tf: commonTF } };
+        let state = { grade: 0, type: '', list: [], userAns: {}, isReview: false, timer: null, timeLeft: 1500 };
 
-        let state = { grade: 0, type: '', list: [], userAns: {}, isReview: false, timer: null, timeLeft: 1500, isMockExam: false };
+        // LOGIC PHÂN QUYỀN VÀ MẬT KHẨU
+        function checkRole(role) {
+            const passForm = document.getElementById('password-form');
+            const teacherSec = document.getElementById('teacher-section');
+            const studentSec = document.getElementById('student-section');
 
-        // XỬ LÝ ĐỌC FILE WORD (.DOCX)
+            if (role === 'teacher') {
+                studentSec.classList.add('hidden');
+                passForm.classList.remove('hidden'); // Hiện form nhập mã
+                teacherSec.classList.add('hidden');
+            } else {
+                passForm.classList.add('hidden');
+                teacherSec.classList.add('hidden');
+                studentSec.classList.remove('hidden'); // Học sinh vào luôn
+                studentSec.scrollIntoView({ behavior: 'smooth' });
+            }
+        }
+
+        function verifyPassword() {
+            const pass = document.getElementById('gv-pass').value;
+            if (pass === 'GVS2026') {
+                document.getElementById('password-form').classList.add('hidden');
+                document.getElementById('teacher-section').classList.remove('hidden');
+            } else {
+                alert('Sai mã xác thực Giáo viên! Vui lòng kiểm tra lại.');
+            }
+        }
+
+        // XỬ LÝ FILE WORD
         function handleWordUpload(event) {
             const file = event.target.files[0];
             if (!file) return;
-
             const statusDiv = document.getElementById('upload-status');
-            statusDiv.innerText = "⏳ Đang trích xuất dữ liệu file Word...";
-            statusDiv.classList.remove('hidden');
+            statusDiv.innerText = "⏳ Đang xử lý..."; statusDiv.classList.remove('hidden');
 
             const reader = new FileReader();
-            reader.onload = function(loadEvent) {
-                const arrayBuffer = loadEvent.target.result;
-
-                mammoth.extractRawText({ arrayBuffer: arrayBuffer })
-                    .then(function(result) {
-                        parseWordToQuestions(result.value);
-                    })
-                    .catch(function(err) {
-                        alert("Lỗi đọc file Word: " + err);
-                        statusDiv.classList.add('hidden');
+            reader.onload = function(e) {
+                mammoth.extractRawText({ arrayBuffer: e.target.result }).then(res => {
+                    const lines = res.value.split('\n').map(l => l.trim()).filter(l => l.length > 0);
+                    let uploadedM = []; let curQ = null;
+                    lines.forEach(line => {
+                        if (line.match(/^Câu\s+\d+[:\.]/i)) {
+                            if (curQ && curQ.options.length > 0) uploadedM.push(curQ);
+                            curQ = { question: line.replace(/^Câu\s+\d+[:\.]/i, "").trim(), options: [], answer: 0 };
+                        } else if (curQ && line.match(/^[A-D][:\.\)]/i)) {
+                            let optTxt = line.replace(/^[A-D][:\.\)]/i, "").trim();
+                            if (optTxt.endsWith('*')) { optTxt = optTxt.slice(0,-1).trim(); curQ.answer = curQ.options.length; }
+                            curQ.options.push(optTxt);
+                        }
                     });
+                    if (curQ && curQ.options.length > 0) uploadedM.push(curQ);
+                    if (uploadedM.length > 0) {
+                        questionsDB['WORD'] = { multiple: uploadedM, tf: [] };
+                        statusDiv.innerText = `✅ Đã nạp thành công ${uploadedM.length} câu!`;
+                        setTimeout(() => selectGrade('WORD'), 1000);
+                    }
+                });
             };
             reader.readAsArrayBuffer(file);
         }
 
-        // PHÂN TÍCH CHỮ THÔ TỪ FILE WORD SANG DATA STRUCTURE
-        function parseWordToQuestions(text) {
-            const lines = text.split('\n').map(line => line.trim()).filter(line => line.length > 0);
-            let uploadedMultiple = [];
-            let currentQuestion = null;
-
-            lines.forEach(line => {
-                // Nhận dạng dòng câu hỏi (Bắt đầu bằng chữ Câu và số)
-                if (line.match(/^Câu\s+\d+[:\.]/i)) {
-                    if (currentQuestion && currentQuestion.options.length > 0) {
-                        uploadedMultiple.push(currentQuestion);
-                    }
-                    currentQuestion = {
-                        question: line.replace(/^Câu\s+\d+[:\.]/i, "").trim(),
-                        options: [],
-                        answer: 0
-                    };
-                } 
-                // Nhận dạng dòng đáp án trắc nghiệm A, B, C, D
-                else if (currentQuestion && line.match(/^[A-D][:\.\)]/i)) {
-                    let optionText = line.replace(/^[A-D][:\.\)]/i, "").trim();
-                    
-                    // Nếu dòng có dấu móc sao (*) ở cuối thì quy ước đó là đáp án ĐÚNG
-                    if (optionText.endsWith('*')) {
-                        optionText = optionText.slice(0, -1).trim();
-                        currentQuestion.answer = currentQuestion.options.length;
-                    }
-                    currentQuestion.options.push(optionText);
-                }
-            });
-
-            if (currentQuestion && currentQuestion.options.length > 0) {
-                uploadedMultiple.push(currentQuestion);
-            }
-
-            if (uploadedMultiple.length > 0) {
-                // Nạp đè mảng câu hỏi vừa upload vào một phân vùng dữ liệu ảo lớp 'WORD'
-                questionsDB['WORD'] = { multiple: uploadedMultiple, tf: [] };
-                
-                document.getElementById('upload-status').innerText = `✅ Đã nạp thành công ${uploadedMultiple.length} câu trắc nghiệm từ file Word!`;
-                
-                // Chuyển thẳng tới màn hình chọn hình thức của file vừa nạp
-                setTimeout(() => { selectGrade('WORD'); }, 1000);
-            } else {
-                alert("Không tìm thấy cấu trúc câu hỏi hợp lệ. Hãy kiểm tra lại file Word (Cấu trúc: Câu 1: ... \\n A. ... \\n B. ...*)");
-                document.getElementById('upload-status').classList.add('hidden');
-            }
-        }
-
+        // NAVIGATION & ENGINE
         function selectGrade(g) {
             state.grade = g;
-            document.getElementById('grade-display').innerText = g === 'WORD' ? `ĐỀ TỪ FILE WORD` : `CÔNG NGHỆ ${g}`;
-            const options = document.getElementById('type-options');
-            
-            if (g === 'WORD') {
-                options.innerHTML = `
-                    <button onclick="prepareQuiz('multiple')" class="btn-tech glass p-8 rounded-2xl text-xl font-bold">Làm bộ đề vừa nạp</button>
-                    <button disabled class="btn-tech glass p-8 rounded-2xl text-xl font-bold opacity-30 cursor-not-allowed">Trắc nghiệm Đúng/Sai (Chưa nạp)</button>
-                `;
-            } else {
-                options.innerHTML = `
-                    <button onclick="prepareQuiz('multiple')" class="btn-tech glass p-8 rounded-2xl text-xl font-bold">Trắc nghiệm 1 đáp án</button>
-                    <button onclick="prepareQuiz('tf')" class="btn-tech glass p-8 rounded-2xl text-xl font-bold">Trắc nghiệm Đúng/Sai</button>
-                    <button onclick="prepareMockExam()" class="btn-tech glass p-8 rounded-2xl text-xl font-bold bg-sky-600/20 border-sky-400">THI THỬ (Barem chuẩn Bộ)</button>
-                `;
-            }
+            document.getElementById('grade-display').innerText = g === 'WORD' ? 'ĐỀ WORD VỪA NẠP' : `CÔNG NGHỆ ${g}`;
+            const opt = document.getElementById('type-options');
+            opt.innerHTML = g === 'WORD' ? 
+                `<button onclick="prepareQuiz('multiple')" class="btn-tech glass p-8 rounded-2xl text-xl font-bold">LÀM BÀI VỪA NẠP</button>` :
+                `<button onclick="prepareQuiz('multiple')" class="btn-tech glass p-8 rounded-2xl text-xl font-bold">Trắc nghiệm 1 đáp án</button>
+                 <button onclick="prepareQuiz('tf')" class="btn-tech glass p-8 rounded-2xl text-xl font-bold">Trắc nghiệm Đúng/Sai</button>`;
             goScreen(2);
         }
 
-        function shuffle(array) {
-            for (let i = array.length - 1; i > 0; i--) {
-                const j = Math.floor(Math.random() * (i + 1));
-                [array[i], array[j]] = [array[j], array[i]];
-            }
-            return array;
-        }
-
-        function cleanText(text) { return text.replace(/^Câu \d+[:\.]?\s*/i, "").trim(); }
-
-        function prepareMockExam() {
-            state.type = 'mock'; state.isReview = false; state.userAns = {}; state.isMockExam = true;
-            let allM = JSON.parse(JSON.stringify(questionsDB[state.grade].multiple));
-            let allTF = JSON.parse(JSON.stringify(questionsDB[state.grade].tf));
-            
-            state.list = [...shuffle(allM), ...shuffle(allTF)];
-            state.list.forEach((q, i) => {
-                q.originalType = i < allM.length ? 'multiple' : 'tf';
-            });
-            goScreen(3); render(); startTimer();
+        function goScreen(id) {
+            document.querySelectorAll('[id^="screen-"]').forEach(s => s.classList.add('hidden'));
+            document.getElementById(`screen-${id}`).classList.remove('hidden');
         }
 
         function prepareQuiz(type) {
-            state.type = type; state.isReview = false; state.userAns = {}; state.isMockExam = false;
-            let data = JSON.parse(JSON.stringify(questionsDB[state.grade][type]));
-            state.list = shuffle(data);
+            state.type = type; state.isReview = false; state.userAns = {};
+            state.list = questionsDB[state.grade][type];
             goScreen(3); render(); startTimer();
         }
 
         function render() {
             const container = document.getElementById('quiz-container');
             container.innerHTML = '';
-            let mcCount = 0; let tfCount = 0;
-            let totalMcInMock = state.list.filter(q => q.originalType === 'multiple').length;
-
             state.list.forEach((q, idx) => {
-                const qType = q.originalType || state.type;
-                if (state.isMockExam) {
-                    if (idx === 0) container.innerHTML += `<div class="section-header"><h3 class="text-xl font-bold text-sky-400 uppercase tracking-widest">Phần I: Trắc nghiệm khách quan (Mỗi câu đúng 0.25đ)</h3></div>`;
-                    else if (idx === totalMcInMock) container.innerHTML += `<div class="section-header"><h3 class="text-xl font-bold text-sky-400 uppercase tracking-widest">Phần II: Trắc nghiệm Đúng/Sai (Tính điểm lũy tiến theo quy chế Bộ GD)</h3></div>`;
-                }
-
-                let displayNum = state.isMockExam ? (qType === 'multiple' ? ++mcCount : ++tfCount) : idx + 1;
                 const div = document.createElement('div');
                 div.className = "glass p-6 rounded-2xl border-l-4 border-transparent hover:border-sky-500 transition-all";
-                
-                if (qType === 'tf') {
-                    div.innerHTML = `<p class="text-sky-100 font-bold mb-4 text-lg"><span class="text-sky-400 mr-2 font-tech">Câu ${displayNum}:</span>${cleanText(q.q)}</p>`;
-                    q.sub.forEach((s, sIdx) => {
-                        const subId = `${idx}_${sIdx}`;
-                        const userChoice = state.userAns[subId];
-                        let btnD = "border-white/10", btnS = "border-white/10";
+                if (state.type === 'tf') {
+                    div.innerHTML = `<p class="font-bold mb-4 text-lg"><span class="text-sky-400 mr-2">Câu ${idx+1}:</span>${q.q}</p>`;
+                    q.sub.forEach((s, si) => {
+                        const userChoice = state.userAns[`${idx}_${si}`];
+                        let bD = "border-white/10", bS = "border-white/10";
                         if (state.isReview) {
-                            btnD = s.a === "Đ" ? "correct-tf" : (userChoice === "Đ" ? "wrong-tf" : "opacity-30");
-                            btnS = s.a === "S" ? "correct-tf" : (userChoice === "S" ? "wrong-tf" : "opacity-30");
-                        } else if(userChoice === "Đ") btnD = "active-tf"; else if(userChoice === "S") btnS = "active-tf";
-                        
-                        div.innerHTML += `
-                            <div class="flex flex-col md:flex-row md:items-center justify-between p-4 border-b border-white/5 last:border-0 gap-3">
-                                <span class="flex-1 text-sm">${String.fromCharCode(97+sIdx)}) ${s.t}</span>
-                                <div class="flex gap-2">
-                                    <button onclick="pickTF('${subId}', 'Đ')" class="w-20 py-2 rounded-lg border font-bold text-xs ${btnD}" ${state.isReview?'disabled':''}>ĐÚNG</button>
-                                    <button onclick="pickTF('${subId}', 'S')" class="w-20 py-2 rounded-lg border font-bold text-xs ${btnS}" ${state.isReview?'disabled':''}>SAI</button>
-                                </div>
-                            </div>`;
+                            bD = s.a === "Đ" ? "correct-tf" : (userChoice === "Đ" ? "wrong-tf" : "opacity-30");
+                            bS = s.a === "S" ? "correct-tf" : (userChoice === "S" ? "wrong-tf" : "opacity-30");
+                        } else if(userChoice === "Đ") bD = "active-tf"; else if(userChoice === "S") bS = "active-tf";
+                        div.innerHTML += `<div class="flex justify-between items-center p-4 border-b border-white/5 last:border-0">
+                            <span class="text-sm">${s.t}</span>
+                            <div class="flex gap-2">
+                                <button onclick="pickTF('${idx}_${si}', 'Đ')" class="w-16 py-1 rounded border text-xs ${bD}" ${state.isReview?'disabled':''}>ĐÚNG</button>
+                                <button onclick="pickTF('${idx}_${si}', 'S')" class="w-16 py-1 rounded border text-xs ${bS}" ${state.isReview?'disabled':''}>SAI</button>
+                            </div>
+                        </div>`;
                     });
                 } else {
-                    div.innerHTML = `<p class="text-sky-100 font-bold mb-4 text-lg"><span class="text-sky-400 mr-2 font-tech">Câu ${displayNum}:</span>${cleanText(q.question)}</p>
-                        <div class="grid grid-cols-1 gap-3">
-                            ${q.options.map((opt, i) => {
-                                let cls = "border-white/10";
-                                if(state.isReview) {
-                                    if(i === q.answer) cls = "bg-emerald-600 border-emerald-500 text-white";
-                                    else if(state.userAns[idx] === i) cls = "bg-red-600 border-red-500 text-white";
-                                } else if(state.userAns[idx] === i) cls = "selected-mc";
-                                return `<button onclick="pickMC(${idx}, ${i})" class="p-4 border rounded-xl text-left text-sm flex items-start ${cls}" ${state.isReview?'disabled':''}>
-                                    <span class="font-bold mr-3 text-sky-500">${String.fromCharCode(65+i)}.</span> <span>${opt}</span>
-                                </button>`;
-                            }).join('')}
-                        </div>`;
+                    div.innerHTML = `<p class="font-bold mb-4 text-lg"><span class="text-sky-400 mr-2">Câu ${idx+1}:</span>${q.question}</p>
+                        <div class="grid gap-3">${q.options.map((opt, i) => {
+                            let cls = "border-white/10";
+                            if(state.isReview) {
+                                if(i === q.answer) cls = "bg-emerald-600 border-emerald-500";
+                                else if(state.userAns[idx] === i) cls = "bg-red-600 border-red-500";
+                            } else if(state.userAns[idx] === i) cls = "selected-mc border-sky-500";
+                            return `<button onclick="pickMC(${idx}, ${i})" class="p-4 border rounded-xl text-left text-sm ${cls}" ${state.isReview?'disabled':''}>${opt}</button>`;
+                        }).join('')}</div>`;
                 }
                 container.appendChild(div);
             });
         }
 
-        function pickMC(qIdx, oIdx) { state.userAns[qIdx] = oIdx; render(); }
+        function pickMC(qI, oI) { state.userAns[qI] = oI; render(); }
         function pickTF(id, val) { state.userAns[id] = val; render(); }
-        function confirmSubmit() { if(confirm("Nộp bài?")) submit(); }
+        function confirmSubmit() { if(confirm("Bạn muốn nộp bài?")) submit(); }
 
         function submit() {
             clearInterval(state.timer);
-            document.getElementById('timer-container').classList.add('hidden');
-            let totalScore = 0; let totalMcCorrect = 0; let totalTfSubCorrect = 0;
-            const tfBarem = [0, 0.1, 0.25, 0.5, 1.0];
-
+            let score = 0;
             state.list.forEach((q, idx) => {
-                const qType = q.originalType || state.type;
-                if(qType === 'tf') {
-                    let subCorrectInQuestion = 0;
-                    q.sub.forEach((s, si) => { if(state.userAns[`${idx}_${si}`] === s.a) { subCorrectInQuestion++; totalTfSubCorrect++; } });
-                    totalScore += tfBarem[subCorrectInQuestion];
+                if(state.type === 'tf') {
+                    let c = 0; q.sub.forEach((s, si) => { if(state.userAns[`${idx}_${si}`] === s.a) c++; });
+                    score += [0, 0.1, 0.25, 0.5, 1.0][c] || 0;
                 } else {
-                    if(state.userAns[idx] === q.answer) { totalScore += 0.25; totalMcCorrect++; }
+                    if(state.userAns[idx] === q.answer) score += 0.25;
                 }
             });
-
-            let mcCount = state.list.filter(q => (q.originalType || state.type) === 'multiple').length;
-            let tfCount = state.list.filter(q => (q.originalType || state.type) === 'tf').length;
-            let maxScore = (mcCount * 0.25) + (tfCount * 1.0);
-
-            document.getElementById('score-text').innerText = totalScore.toFixed(2);
-            document.getElementById('max-score-label').innerText = `Điểm số (Tối đa ${maxScore.toFixed(2)})`;
-            document.getElementById('detail-text').innerText = `Đúng ${totalMcCorrect} câu trắc nghiệm đơn & ${totalTfSubCorrect} ý Đúng/Sai`;
-            
-            goScreen(4); window.scrollTo(0,0);
+            document.getElementById('score-text').innerText = score.toFixed(2);
+            goScreen(4);
         }
 
         function startTimer() {
-            clearInterval(state.timer); state.timeLeft = 1500; updateTimerDisplay();
+            clearInterval(state.timer); state.timeLeft = 1500;
             document.getElementById('timer-container').classList.remove('hidden');
             state.timer = setInterval(() => {
-                state.timeLeft--; updateTimerDisplay();
-                if (state.timeLeft <= 0) { clearInterval(state.timer); submit(); }
+                state.timeLeft--;
+                const m = Math.floor(state.timeLeft/60); const s = state.timeLeft%60;
+                document.getElementById('timer-display').innerText = `${m}:${s<10?'0':''}${s}`;
+                if(state.timeLeft<=0) submit();
             }, 1000);
         }
-
-        function updateTimerDisplay() {
-            const min = Math.floor(state.timeLeft / 60); const sec = state.timeLeft % 60;
-            const display = document.getElementById('timer-display');
-            display.innerText = `${min}:${sec < 10 ? '0' : ''}${sec}`;
-            if (state.timeLeft < 300) display.classList.add('low-time');
-        }
-
-        function showReview() { state.isReview = true; goScreen(3); render(); window.scrollTo(0,0); }
-        
-        function goScreen(id) {
-            document.querySelectorAll('[id^="screen-"]').forEach(s => s.classList.add('hidden'));
-            document.getElementById(`screen-${id}`).classList.remove('hidden');
-        }
+        function showReview() { state.isReview = true; goScreen(3); render(); }
     </script>
 </body>
 </html>
